@@ -14,13 +14,6 @@ namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
  */
 class Attribute
 {
-    /**
-     * @var string
-     */
     public $key;
-
-    /**
-     * @var mixed
-     */
     public $value;
 }

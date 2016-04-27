@@ -15,7 +15,7 @@
   "require": {
     "php": ">=5.5.9",
     "doctrine/orm": "^2.5",
-    "symfony/serializer": "^3.1@dev",
+    "symfony/serializer": "^2.8|^3.0",
     "symfony/property-access": "^2.8|^3.0",
     "symfony/property-info": "^2.8|^3.0",
     "phpdocumentor/reflection": "^1.0"

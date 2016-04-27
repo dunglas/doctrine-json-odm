@@ -10,6 +10,9 @@
 namespace Dunglas\DoctrineJsonOdm\tests;
 
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attribute;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -32,7 +35,7 @@ class FunctionalTest extends KernelTestCase
         $this->application = new Application(self::$kernel);
         $this->application->setAutoExit(false);
 
-        $this->runCommand('doctrine:database:create');
+        $this->runCommand('doctrine:schema:drop --force');
         $this->runCommand('doctrine:schema:create');
     }
 
@@ -67,5 +70,34 @@ class FunctionalTest extends KernelTestCase
         $this->assertEquals('bar', $retrievedProduct->attributes[0]->value);
         $this->assertEquals('weights', $retrievedProduct->attributes[1]->key);
         $this->assertEquals([34, 67], $retrievedProduct->attributes[1]->value);
+    }
+
+    public function testStoreAndRetrieveDocumentsOfVariousTypes()
+    {
+        $bar = new Bar();
+        $bar->setTitle('Bar');
+        $bar->setWeight(12);
+
+        $baz = new Baz();
+        $baz->setName('Baz');
+        $baz->setSize(7);
+
+        $foo = new Foo();
+        $foo->setName('Foo');
+        $foo->setMisc([$bar, $baz]);
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
+        $manager->persist($foo);
+        $manager->flush();
+
+        $manager->clear();
+
+        $manager->find(Foo::class, $foo->getId());
+        $this->assertInstanceOf(Bar::class, $foo->getMisc()[0]);
+        $this->assertEquals('Bar', $foo->getMisc()[0]->getTitle());
+        $this->assertEquals(12, $foo->getMisc()[0]->getWeight());
+        $this->assertInstanceOf(Baz::class, $foo->getMisc()[1]);
+        $this->assertEquals('Baz', $foo->getMisc()[1]->getName());
+        $this->assertEquals(7, $foo->getMisc()[1]->getSize());
     }
 }

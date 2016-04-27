@@ -5,8 +5,23 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="dunglas_doctrine_json_odm.entity_manager" class="Dunglas\DoctrineJsonOdm\EntityManager" decorates="doctrine.orm.default_entity_manager" public="false">
-            <argument type="service" id="dunglas_doctrine_json_odm.entity_manager.inner" />
+        <service id="dunglas_doctrine_json_odm.normalizer.raw_object" alias="serializer.normalizer.object" public="false"/>
+
+        <service id="dunglas_doctrine_json_odm.normalizer.object" class="Dunglas\DoctrineJsonOdm\Normalizer\ObjectNormalizer" public="false">
+            <argument type="service" id="dunglas_doctrine_json_odm.normalizer.raw_object" />
+        </service>
+
+        <service id="dunglas_doctrine_json_odm.normalizer.array" class="Dunglas\DoctrineJsonOdm\Normalizer\ArrayDenormalizer" public="false" />
+
+        <service id="dunglas_doctrine_json_odm.serializer" class="Symfony\Component\Serializer\Serializer">
+            <argument type="collection">
+                <argument type="service" id="dunglas_doctrine_json_odm.normalizer.object" />
+                <argument type="service" id="dunglas_doctrine_json_odm.normalizer.array" />
+            </argument>
+
+            <argument type="collection">
+                <argument type="service" id="serializer.encoder.json" />
+            </argument>
         </service>
     </services>
 </container>

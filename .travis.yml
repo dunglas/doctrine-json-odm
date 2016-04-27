@@ -7,6 +7,12 @@ cache:
 services:
   - postgresql
 
+env:
+  - SYMFONY__POSTGRESQL_HOST=127.0.0.1
+  - SYMFONY__POSTGRESQL_USER=postgres
+  - SYMFONY__POSTGRESQL_PASSWORD=
+  - SYMFONY__POSTGRESQL_DBNAME=travis_ci_test
+
 php:
     - 5.5
     - 5.6
@@ -27,6 +33,7 @@ matrix:
 before_install:
     - composer self-update
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+    - psql -c 'create database travis_ci_test;' -U postgres
 
 install:
     - composer update --no-interaction --prefer-dist

@@ -50,10 +50,10 @@ class AppKernel extends Kernel
         $c->loadFromExtension('doctrine', [
             'dbal' => [
                 'driver' => 'pdo_pgsql',
-                'host' => '127.0.0.1',
-                'dbname' => 'jsonodm',
-                'user' => 'dunglas',
-                'password' => '',
+                'host' => '%postgresql_host%',
+                'dbname' => '%postgresql_dbname%',
+                'user' => '%postgresql_user%',
+                'password' => '%postgresql_password%',
                 'charset' => 'UTF8',
             ],
             'orm' => [

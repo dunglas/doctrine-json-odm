@@ -10,7 +10,7 @@
 namespace Dunglas\DoctrineJsonOdm\Bundle;
 
 use Doctrine\DBAL\Types\Type;
-use Dunglas\DoctrineJsonOdm\JsonDocumentType;
+use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -22,7 +22,9 @@ final class DunglasDoctrineJsonOdmBundle extends Bundle
 {
     public function __construct()
     {
-        Type::addType('json_document', JsonDocumentType::class);
+        if (!Type::hasType('json_document')) {
+            Type::addType('json_document', JsonDocumentType::class);
+        }
     }
 
     /**
@@ -31,7 +33,6 @@ final class DunglasDoctrineJsonOdmBundle extends Bundle
     public function boot()
     {
         $type = Type::getType('json_document');
-        $type->setNormalizer($this->container->get('serializer'));
-        $type->setPropertyTypeExtractor($this->container->get('property_info'));
+        $type->setSerializer($this->container->get('dunglas_doctrine_json_odm.serializer'));
     }
 }

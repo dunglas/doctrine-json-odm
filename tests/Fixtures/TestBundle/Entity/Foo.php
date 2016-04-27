@@ -16,22 +16,47 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class Product
+class Foo
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    private $id;
 
     /**
-     *  @ORM\Column(type="string")
+     * @ORM\Column(type="string")
      */
-    public $name;
+    private $name;
 
     /**
      * @ORM\Column(type="json_document", options={"jsonb": true})
      */
-    public $attributes;
+    private $misc;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getMisc()
+    {
+        return $this->misc;
+    }
+
+    public function setMisc(array $misc)
+    {
+        $this->misc = $misc;
+    }
 }
