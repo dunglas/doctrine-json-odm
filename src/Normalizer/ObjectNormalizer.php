@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
+final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
     private $objectNormalizer;
 
@@ -37,7 +37,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = []) : array
+    public function normalize($object, $format = null, array $context = [])
     {
         return [
             '_type' => get_class($object),
@@ -48,7 +48,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null) : bool
+    public function supportsNormalization($data, $format = null)
     {
         return is_object($data);
     }
@@ -64,7 +64,7 @@ class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, Se
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null) : bool
+    public function supportsDenormalization($data, $type, $format = null)
     {
         return isset($data['_type']) && isset($data['_value']);
     }

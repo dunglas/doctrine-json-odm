@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class ArrayDenormalizer implements DenormalizerInterface, SerializerAwareInterface
+final class ArrayDenormalizer implements DenormalizerInterface, SerializerAwareInterface
 {
     /**
      * @var SerializerInterface
