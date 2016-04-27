@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+         backupGlobals="false"
+         colors="true"
+         bootstrap="tests/bootstrap.php"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <server name="KERNEL_DIR" value="tests/Fixtures" />
+    </php>
+
+    <filter>
+        <whitelist>
+            <directory>.</directory>
+            <exclude>
+                <directory>tests</directory>
+                <directory>vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
