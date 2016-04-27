@@ -53,9 +53,9 @@ final class JsonDocumentType extends JsonArrayType
     /**
      * Gets the serializer or throw an exception if it isn't available.
      *
-     * @return SerializerInterface
-     *
      * @throws \RuntimeException
+     *
+     * @return SerializerInterface
      */
     private function getSerializer()
     {
