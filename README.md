@@ -125,7 +125,7 @@ class Foo
 namespace AppBundle\Entity;
 
 /**
- * This is NOT an entity! It's a POPO.
+ * This is NOT an entity! It's a POPO (Plain Old PHP Object).
  */
 class Bar
 {
