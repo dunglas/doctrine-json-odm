@@ -82,42 +82,21 @@ class Foo
    * @ORM\Id
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  private $id;
+  public $id;
 
   /**
    * @ORM\Column(type="string")
    */
-  private $name;
+  public $name;
 
   /**
+   * Can contain anything (array, objects, nested objects...).
+   *
    * @ORM\Column(type="json_document", options={"jsonb": true})
    */
-  private $misc;
+  public $misc;
 
-  public function getId()
-  {
-      return $this->id;
-  }
-
-  public function getName()
-  {
-      return $this->name;
-  }
-
-  public function setName($name)
-  {
-      $this->name = $name;
-  }
-
-  public function getMisc()
-  {
-      return $this->misc;
-  }
-
-  public function setMisc(array $misc)
-  {
-      $this->misc = $misc;
-  }
+  // Works with private and protected methods with getters and setters too.
 }
 ```
 
@@ -125,44 +104,12 @@ class Foo
 namespace AppBundle\Entity;
 
 /**
- * This is NOT an entity! It's a POPO (Plain Old PHP Object).
+ * This is NOT an entity! It's a POPO (Plain Old PHP Object). It can contain anything.
  */
 class Bar
 {
-    private $title;
-    private $weight;
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * @param mixed $weight
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-    }
+    public $title;
+    public $weight;
 }
 ```
 
@@ -170,32 +117,12 @@ class Bar
 namespace AppBundle\Entity;
 
 /**
- * This is NOT an entity. It's another POPO.
+ * This is NOT an entity. It's another POPO and it can contain anything.
  */
 class Baz
 {
-    private $name;
-    private $size;
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    public function setSize($size)
-    {
-        $this->size = $size;
-    }
+    public $name;
+    public $size;
 }
 ```
 
@@ -205,16 +132,16 @@ Store a graph of random object in the JSON type of the database:
 // $entityManager = $this->get('doctrine'))->get('doctrine')->getManagerForClass(\AppBundle/EntityFoo::class);
 
 $bar = new Bar();
-$bar->setTitle('Bar');
-$bar->setWeight(12);
+$bar->title = 'Bar';
+$bar->weight = 12;
 
 $baz = new Baz();
-$baz->setName('Baz');
-$baz->setSize(7);
+$baz->name = 'Baz';
+$baz->size = 7;
 
 $foo = new Foo();
-$foo->setName('Foo');
-$foo->setMisc([$bar, $baz]);
+$foo->name = 'Foo';
+$foo->misc = [$bar, $baz);
 
 $entityManager->persist($foo);
 $entityManager->flush();
@@ -223,7 +150,8 @@ $entityManager->flush();
 Retrieve the object graph back:
 
 ```php
-$entityManager->find(Foo::class, $foo->getId());
+$foo = $entityManager->find(Foo::class, $foo->getId());
+var_dump($foo->misc); // Same as what we set earlier
 ```
 
 You can execute complex queries using [native queries](http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/reference/native-sql.html).
@@ -271,7 +199,7 @@ Run the following commands in your shell to set mandatory environment variables:
     export SYMFONY__POSTGRESQL_HOST=127.0.0.1
     export SYMFONY__POSTGRESQL_USER=dunglas
     export SYMFONY__POSTGRESQL_PASSWORD=
-    export SYMFONY__POSTGRESQL_DBNAME=mytestdatabase
+    export SYMFONY__POSTGRESQL_DBNAME=my_test_db
 
 The database must exist. Be careful, its content may be deleted.
 
