@@ -35,7 +35,7 @@ class AppKernel extends Kernel
 
     // ...
 }
-```php
+```
 
 
 ## Usage
