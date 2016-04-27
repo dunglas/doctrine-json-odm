@@ -58,7 +58,7 @@ then, it is stored in a dynamic JSON column in the database.
 
 When the object will be hydrated, the JSON content of this column is transformed back to its original values, thanks again
 to the Symfony Serializer.
-All PHP objects and structures will be preserved (if you use Symfony >= 3.1, see thr FAQ).
+All PHP objects and structures will be preserved (if you use Symfony >= 3.1, see the FAQ).
 
 You can store any type of (serializable) PHP data structures in properties mapped using the `json_document` type.
 
@@ -129,7 +129,7 @@ class Baz
 Store a graph of random object in the JSON type of the database:
 
 ```php
-// $entityManager = $this->get('doctrine'))->get('doctrine')->getManagerForClass(\AppBundle/EntityFoo::class);
+// $entityManager = $this->get('doctrine')->getManagerForClass(\AppBundle/EntityFoo::class);
 
 $bar = new Bar();
 $bar->title = 'Bar';
@@ -209,5 +209,5 @@ Run the test suite using [PHPUnit](https://phpunit.de/):
 
 ## Credits
 
-This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and [awesome contributors](https://github.com/dunglas/DunglasActionBundle/graphs/contributors).
+This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
 Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
