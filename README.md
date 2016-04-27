@@ -141,7 +141,7 @@ $baz->size = 7;
 
 $foo = new Foo();
 $foo->name = 'Foo';
-$foo->misc = [$bar, $baz);
+$foo->misc = [$bar, $baz]
 
 $entityManager->persist($foo);
 $entityManager->flush();
