@@ -1,4 +1,6 @@
-# Doctrine JSON ODM: an Object-Document Mapper (ODM) for Doctrine ORM (!) leveraging new JSON types of modern RDBMS
+# Doctrine JSON ODM
+
+An Object-Document Mapper (ODM) for Doctrine ORM leveraging new JSON types of modern RDBMS.
 
 [![Build Status](https://travis-ci.org/dunglas/doctrine-json-odm.svg?branch=master)](https://travis-ci.org/dunglas/doctrine-json-odm)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/?branch=master)
