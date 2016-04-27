@@ -1,8 +1,8 @@
 {
   "name": "dunglas/doctrine-json-odm",
   "type": "library",
-  "description": "An object document mapper for Doctrine ORM using JSON types of RDBMS.",
-  "keywords": ["ORM", "ODM", "JSON", "database", "RDBMS"],
+  "description": "An object document mapper for Doctrine ORM using JSON types of modern RDBMS.",
+  "keywords": ["ORM", "ODM", "JSON", "database", "RDBMS", "PostgreSQL", "MySQL"],
   "homepage": "https://dunglas.fr",
   "license": "MIT",
   "authors": [
@@ -15,14 +15,14 @@
   "require": {
     "php": ">=5.5.9",
     "doctrine/orm": "^2.5",
-    "symfony/serializer": "^2.8|^3.0",
-    "symfony/property-access": "^2.8|^3.0",
-    "symfony/property-info": "^2.8|^3.0",
-    "phpdocumentor/reflection": "^1.0"
+    "symfony/serializer": "^2.8|^3.0"
   },
   "require-dev": {
     "symfony/framework-bundle": "^2.8|^3.0",
-    "doctrine/doctrine-bundle": "^1.6"
+    "doctrine/doctrine-bundle": "^1.6",
+    "symfony/property-access": "^2.8|^3.0",
+    "symfony/property-info": "^2.8|^3.0",
+    "phpdocumentor/reflection": "^1.0|^2.0"
   },
   "suggest": {
     "symfony/symfony": "To use the provided bundle."

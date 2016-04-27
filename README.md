@@ -1,16 +1,24 @@
-# Doctrine JSON ODM
+# Doctrine JSON ODM: an Object-Document Mapper (ODM) for Doctrine ORM (!) leveraging new JSON types of modern RDBMS
 
-An ODM for Doctrine ORM (!) using JSON types of modern RDBMS.
-It allows to store and queries graphs of PHP objects (objects and objects related to other objects) as JSON documents.
-With modern databases (PostgreSQL >= 9.4 and, soon, MySQL >= 5.7.8).
+[![Build Status](https://travis-ci.org/dunglas/doctrine-json-odm.svg?branch=master)](https://travis-ci.org/dunglas/doctrine-json-odm)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/?branch=master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/20cf915b-1554-4f89-8772-ef0f913ec759/mini.png)](https://insight.sensiolabs.com/projects/20cf915b-1554-4f89-8772-ef0f913ec759)
+[![StyleCI](https://styleci.io/repos/57223826/shield)](https://styleci.io/repos/57223826)
 
-It enables the possibility to create powerful data models mixing traditional relational mappings with modern
-schema-less and NOSQL-like ones.
+Did you ever dreamed of a tool creating powerful data models mixing traditional efficient relational mappings with modern
+schema-less and NoSQL-like ones?
+
+With Doctrine JSON ODM, it's now possible to create and query such hybrid data models with ease. Thanks to [modern JSON
+types of RDBMS](http://www.postgresql.org/docs/current/static/datatype-json.html), querying schema-less documents is easy,
+powerful and [fast as hell (similar in performance to a MongoDB database)](http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality)!
+You can even [define indexes](http://www.postgresql.org/docs/current/static/datatype-json.html#JSON-INDEXING) for those documents.
+
+Doctrine JSON ODM allows to store PHP objects as JSON documents in modern dynamic columns of RDBMS.
+It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and, soon, will support the JSON column of MySQL (>= 5.7.8).
 
 ## Install
 
-If you use [Symfony](https://symfony.com), just install the bundle provided by the library.
-The doc to use the library standalone has not be started at this time.
+The library comes with a bundle for the [Symfony](https://symfony.com) framework.
 
 ```php
 // ...
@@ -37,17 +45,22 @@ class AppKernel extends Kernel
 }
 ```
 
+Doctrine JSON ODM can also be used standalone, without any framework, but hasn't been redacted yet (PRs welcome!).
 
 ## Usage
 
-The library provide a new `json_document` type to map Doctrine properties. The content of such properties will be transformed
-in JSON using the Symfony Serializer and stored in a JSON column in the database.
-Later, when the object will be hydrated, the content JSON of this column will be transformed back to its original values.
-All PHP objects and structures will be preserved.
+Doctrine JSON ODM provides a `json_document` column type for properties of Doctrine entities.
 
-You can store any type of PHP data structures in properties mapped with the `json_document` type.
+The content of properties mapped with this type is serialized in JSON using the [Symfony Serializer](http://symfony.com/doc/current/components/serializer.html)
+then, it is stored in a dynamic JSON column in the database.
 
-Exemple:
+When the object will be hydrated, the JSON content of this column is transformed back to its original values, thanks again
+to the Symfony Serializer.
+All PHP objects and structures will be preserved (if you use Symfony >= 3.1, see thr FAQ).
+
+You can store any type of (serializable) PHP data structures in properties mapped using the `json_document` type.
+
+Example:
 
 
 ```php
@@ -225,8 +238,8 @@ MySQL (>= 5.7.8) will be supported when [the Pull Request doctrine/dbal#2266](ht
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
-Yes. First, need Postgres >= 9.4 as well as Doctrine ORM and DBAL >= 2.6 (dev).
-Then, set the column option of your field to use JSONB:
+First, be sure to use Postgres >= 9.4, Doctrine ORM >= 2.6 (dev) and DBAL >= 2.6 (dev).
+Then, you need to set an option of in the column mapping:
 
 ```php
 // ...
@@ -241,11 +254,11 @@ Then, set the column option of your field to use JSONB:
 
 **How to store objects recursively in the ODM?**
 
-If you want to store an object graph with the ODM, you need to install Symfony >= 3.1 (dev).
-The `phpdocumentor/reflection-docblock` package must also be installed in your application.
+If you want to store an object graph with Doctrine JSON ODM, you need to install Symfony >= 3.1 (dev).
+The `phpdocumentor/reflection-docblock` package is also required.
 Finally, you need to describe your properties containing object with an accurate PHPDoc.
 
-The serializer used by the ODM will use this PHPDoc to normalize the object graph.
+The serializer used by the Doctrine JSON ODM will rely on this PHPDoc to normalize the object graph.
 
 Internally, it uses [the Symfony PropertyInfo component](http://symfony.com/blog/new-in-symfony-2-8-propertyinfo-component).
 
@@ -258,13 +271,11 @@ Run the following commands in your shell to set mandatory environment variables:
     export SYMFONY__POSTGRESQL_PASSWORD=
     export SYMFONY__POSTGRESQL_DBNAME=mytestdatabase
 
-The database must exist. Be careful, it contents may be erased.
+The database must exist. Be careful, its content may be deleted.
 
 Run the test suite using [PHPUnit](https://phpunit.de/):
 
     phpunit
-
-The database is automatically created and dropped.
 
 ## Credits
 
