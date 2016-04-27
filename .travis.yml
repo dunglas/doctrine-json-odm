@@ -7,7 +7,7 @@ cache:
 services:
   - postgresql
 
-env:
+global:
   - SYMFONY__POSTGRESQL_HOST=127.0.0.1
   - SYMFONY__POSTGRESQL_USER=postgres
   - SYMFONY__POSTGRESQL_PASSWORD=
