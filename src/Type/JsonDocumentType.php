@@ -71,7 +71,7 @@ final class JsonDocumentType extends JsonArrayType
      *
      * @param string $format
      */
-    public function setFormat(string $format)
+    public function setFormat($format)
     {
         $this->format = $format;
     }
