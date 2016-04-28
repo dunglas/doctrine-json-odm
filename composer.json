@@ -20,12 +20,12 @@
   "require-dev": {
     "symfony/framework-bundle": "^2.8|^3.0",
     "doctrine/doctrine-bundle": "^1.6",
-    "symfony/property-access": "^2.8|^3.0",
-    "symfony/property-info": "^2.8|^3.0",
-    "phpdocumentor/reflection": "^1.0|^2.0"
+    "symfony/property-access": "^2.8|^3.0"
   },
   "suggest": {
-    "symfony/symfony": "To use the provided bundle."
+    "symfony/symfony": "To use the provided bundle.",
+    "symfony/property-access": "To support complex objects.",
+    "symfony/property-info": "To support complex objects."
   },
   "autoload": {
     "psr-4": { "Dunglas\\DoctrineJsonOdm\\": "src/" }

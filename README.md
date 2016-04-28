@@ -182,15 +182,9 @@ Then, you need to set an option of in the column mapping:
 // ...
 ```
 
-**How to store objects recursively in the ODM?**
+**Does the ODM support nested objects and object graphs?**
 
-If you want to store an object graph with Doctrine JSON ODM, you need to install Symfony >= 3.1 (dev).
-The `phpdocumentor/reflection-docblock` package is also required.
-Finally, you need to describe your properties containing object with an accurate PHPDoc.
-
-The serializer used by the Doctrine JSON ODM will rely on this PHPDoc to normalize the object graph.
-
-Internally, it uses [the Symfony PropertyInfo component](http://symfony.com/blog/new-in-symfony-2-8-propertyinfo-component).
+Yes.
 
 ## Run tests
 

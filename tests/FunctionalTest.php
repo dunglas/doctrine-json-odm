@@ -41,7 +41,7 @@ class FunctionalTest extends KernelTestCase
 
     private function runCommand($command)
     {
-        return $this->application->run(new StringInput($command.' --no-interaction'));
+        return $this->application->run(new StringInput($command.' --no-interaction --quiet'));
     }
 
     public function testStoreAndRetrieveDocument()
@@ -54,9 +54,11 @@ class FunctionalTest extends KernelTestCase
         $attribute2->key = 'weights';
         $attribute2->value = [34, 67];
 
+        $attributes = [$attribute1, $attribute2];
+
         $product = new Product();
         $product->name = 'My product';
-        $product->attributes = [$attribute1, $attribute2];
+        $product->attributes = $attributes;
 
         $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
         $manager->persist($product);
@@ -65,11 +67,7 @@ class FunctionalTest extends KernelTestCase
         $manager->clear();
 
         $retrievedProduct = $manager->find(Product::class, $product->id);
-        $this->assertCount(2, $retrievedProduct->attributes);
-        $this->assertEquals('foo', $retrievedProduct->attributes[0]->key);
-        $this->assertEquals('bar', $retrievedProduct->attributes[0]->value);
-        $this->assertEquals('weights', $retrievedProduct->attributes[1]->key);
-        $this->assertEquals([34, 67], $retrievedProduct->attributes[1]->value);
+        $this->assertEquals($attributes, $retrievedProduct->attributes);
     }
 
     public function testStoreAndRetrieveDocumentsOfVariousTypes()
@@ -82,9 +80,11 @@ class FunctionalTest extends KernelTestCase
         $baz->setName('Baz');
         $baz->setSize(7);
 
+        $misc = [$bar, $baz];
+
         $foo = new Foo();
         $foo->setName('Foo');
-        $foo->setMisc([$bar, $baz]);
+        $foo->setMisc($misc);
 
         $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
         $manager->persist($foo);
@@ -92,12 +92,33 @@ class FunctionalTest extends KernelTestCase
 
         $manager->clear();
 
-        $manager->find(Foo::class, $foo->getId());
-        $this->assertInstanceOf(Bar::class, $foo->getMisc()[0]);
-        $this->assertEquals('Bar', $foo->getMisc()[0]->getTitle());
-        $this->assertEquals(12, $foo->getMisc()[0]->getWeight());
-        $this->assertInstanceOf(Baz::class, $foo->getMisc()[1]);
-        $this->assertEquals('Baz', $foo->getMisc()[1]->getName());
-        $this->assertEquals(7, $foo->getMisc()[1]->getSize());
+        $foo = $manager->find(Foo::class, $foo->getId());
+        $this->assertEquals($misc, $foo->getMisc());
+    }
+
+    public function testNestedObjects()
+    {
+        $attribute = new Attribute();
+        $attribute->key = 'nested';
+        $attribute->value = 'bar';
+
+        $attributeParent = new Attribute();
+        $attributeParent->key = 'parent';
+        $attributeParent->value = [[$attribute]];
+
+        $misc = [$attributeParent];
+
+        $foo = new Foo();
+        $foo->setName('foo');
+        $foo->setMisc($misc);
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
+        $manager->persist($foo);
+        $manager->flush();
+
+        $manager->clear();
+
+        $foo = $manager->find(Foo::class, $foo->getId());
+        $this->assertEquals($misc, $foo->getMisc());
     }
 }

@@ -23,6 +23,10 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
     private $objectNormalizer;
 
     public function __construct(NormalizerInterface $objectNormalizer)
@@ -58,7 +62,20 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        return $this->objectNormalizer->denormalize($data['_value'], $data['_type'], $format, $context);
+        if (isset($data['_value']) && isset($data['_type']) && is_array($data['_value'])) {
+            $data['_value'] = $this->denormalize($data['_value'], $data['_type'], $format, $context);
+            $data = $this->objectNormalizer->denormalize($data['_value'], $data['_type'], $format, $context);
+
+            return $data;
+        }
+
+        if (is_array($data) || $data instanceof \Traversable) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->serializer->denormalize($value, $class, $format, $context);
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -66,7 +83,7 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return isset($data['_type']) && isset($data['_value']);
+        return true;
     }
 
     /**
@@ -74,6 +91,8 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function setSerializer(SerializerInterface $serializer)
     {
+        $this->serializer = $serializer;
+
         if ($this->objectNormalizer instanceof SerializerAwareInterface) {
             $this->objectNormalizer->setSerializer($serializer);
         }
