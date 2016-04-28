@@ -47,7 +47,7 @@ class AppKernel extends Kernel
 }
 ```
 
-Doctrine JSON ODM can also be used standalone, without any framework, but hasn't been redacted yet (PRs welcome!).
+Doctrine JSON ODM can also be used standalone, without any framework, but the documentation hasn't been redacted yet (PRs welcome!).
 
 ## Usage
 
