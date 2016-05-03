@@ -109,6 +109,10 @@ final class JsonDocumentType extends JsonArrayType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if (null === $value || '' === $value) {
+            return;
+        }
+
         return $this->getSerializer()->deserialize($value, '', $this->format, $this->deserializationContext);
     }
 
