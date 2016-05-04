@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
     /**
-     * @var SerializerInterface
+     * @var NormalizerInterface|DenormalizerInterface
      */
     private $serializer;
     private $objectNormalizer;
@@ -43,10 +43,7 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        return [
-            '_type' => get_class($object),
-            '_value' => $this->objectNormalizer->normalize($object, $format, $context),
-        ];
+        return array_merge(['#type' => get_class($object)], $this->objectNormalizer->normalize($object, $format, $context));
     }
 
     /**
@@ -62,9 +59,12 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        if (isset($data['_value']) && isset($data['_type']) && is_array($data['_value'])) {
-            $data['_value'] = $this->denormalize($data['_value'], $data['_type'], $format, $context);
-            $data = $this->objectNormalizer->denormalize($data['_value'], $data['_type'], $format, $context);
+        if (isset($data['#type'])) {
+            $type = $data['#type'];
+            unset($data['#type']);
+
+            $data = $this->denormalize($data, $type, $format, $context);
+            $data = $this->objectNormalizer->denormalize($data, $type, $format, $context);
 
             return $data;
         }
@@ -91,6 +91,12 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function setSerializer(SerializerInterface $serializer)
     {
+        if (!$serializer instanceof NormalizerInterface || !$serializer instanceof DenormalizerInterface) {
+            throw new \InvalidArgumentException(
+                sprintf('The injected serializer must implement "%s" and "%s".', NormalizerInterface::class, DenormalizerInterface::class)
+            );
+        }
+
         $this->serializer = $serializer;
 
         if ($this->objectNormalizer instanceof SerializerAwareInterface) {
