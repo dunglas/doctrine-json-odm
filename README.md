@@ -18,6 +18,8 @@ You can even [define indexes](http://www.postgresql.org/docs/current/static/data
 Doctrine JSON ODM allows to store PHP objects as JSON documents in modern dynamic columns of RDBMS.
 It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and, soon, will support the JSON column of MySQL (>= 5.7.8).
 
+For more information about concepts behind Doctrine JSON ODM, take a look at [the presentation given by Benjamin Eberlei at Symfony Catalunya 2016](https://qafoo.com/resources/presentations/symfony_catalunya_2016/doctrine_orm_and_nosql.html).
+
 ## Install
 
 The library comes with a bundle for the [Symfony](https://symfony.com) framework.
