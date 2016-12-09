@@ -21,7 +21,8 @@
     "symfony/framework-bundle": "^2.8 || ^3.0",
     "doctrine/doctrine-bundle": "^1.6",
     "symfony/property-access": "^2.8 || ^3.0",
-    "symfony/property-info": "^2.8 || ^3.0"
+    "symfony/property-info": "^2.8 || ^3.0",
+    "symfony/finder": "^2.8 || ^3.0"
   },
   "suggest": {
     "symfony/symfony": "To use the provided bundle.",
