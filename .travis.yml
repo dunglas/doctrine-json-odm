@@ -18,23 +18,22 @@ php:
     - 5.5
     - 5.6
     - 7.0
+    - 7.1
 
 matrix:
     fast_finish: true
     include:
-        - php: 7.0
-          env: SYMFONY_VERSION=2.8.*
-        - php: 7.0
-          env: SYMFONY_VERSION=3.0.*
-        - php: 7.0
+        - php: 7.1
+          env: deps=low
 
 before_install:
-    - composer self-update
-    - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+    - phpenv config-rm xdebug.ini || echo "xdebug not available"
     - psql -c 'create database travis_ci_test;' -U postgres
 
 install:
     - composer update --no-interaction --prefer-dist
+    - if [[ ! $deps ]]; then composer update --prefer-dist --no-progress --no-suggest --ansi; fi
+    - if [[ $deps = 'low' ]]; then composer update --prefer-dist --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi; fi
 
 script:
     - phpunit
