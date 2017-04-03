@@ -36,4 +36,4 @@ install:
     - if [[ $deps = 'low' ]]; then composer update --prefer-dist --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi; fi
 
 script:
-    - phpunit
+    - vendor/bin/phpunit
