@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\Normalizer;
 
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
@@ -43,7 +44,7 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        return array_merge(['#type' => get_class($object)], $this->objectNormalizer->normalize($object, $format, $context));
+        return array_merge(['#type' => ClassUtils::getClass($object)], $this->objectNormalizer->normalize($object, $format, $context));
     }
 
     /**
