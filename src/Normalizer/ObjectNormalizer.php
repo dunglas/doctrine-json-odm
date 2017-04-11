@@ -60,6 +60,10 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
+        if (is_object($data)) {
+            return $data;
+        }
+
         if (isset($data['#type'])) {
             $type = $data['#type'];
             unset($data['#type']);
