@@ -10,6 +10,7 @@
 namespace Dunglas\DoctrineJsonOdm\tests;
 
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attribute;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
@@ -119,6 +120,34 @@ class FunctionalTest extends KernelTestCase
         $manager->clear();
 
         $foo = $manager->find(Foo::class, $foo->getId());
+        $this->assertEquals($misc, $foo->getMisc());
+    }
+
+    public function testNestedObjectsInNestedObject()
+    {
+        $attribute1 = new Attribute();
+        $attribute1->key = 'attribute1';
+
+        $attribute2 = new Attribute();
+        $attribute2->key = 'attribute2';
+
+        $attributes = new Attributes();
+        $attributes->setAttributes([$attribute1, $attribute2]);
+
+        $misc = [$attributes];
+
+        $foo = new Foo();
+        $foo->setName('foo');
+        $foo->setMisc($misc);
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
+
+        $manager->persist($foo);
+        $manager->flush();
+        $manager->clear();
+
+        $foo = $manager->find(Foo::class, $foo->getId());
+
         $this->assertEquals($misc, $foo->getMisc());
     }
 }
