@@ -131,7 +131,7 @@ class Baz
 Store a graph of random object in the JSON type of the database:
 
 ```php
-// $entityManager = $this->get('doctrine')->getManagerForClass(\AppBundle/EntityFoo::class);
+// $entityManager = $this->get('doctrine')->getManagerForClass(AppBundle\Entity\Foo::class);
 
 $bar = new Bar();
 $bar->title = 'Bar';
