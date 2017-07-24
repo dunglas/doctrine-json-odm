@@ -165,8 +165,7 @@ MySQL support is coming (see the FAQ).
 
 **What DBMS are supported?**
 
-Currently only PostgreSQL is supported.
-MySQL (>= 5.7.8) will be supported when [the Pull Request doctrine/dbal#2266](https://github.com/doctrine/dbal/pull/2266) will be merged.
+PostgreSQL and MySQL are supported.
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
