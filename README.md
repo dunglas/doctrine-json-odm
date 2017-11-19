@@ -157,19 +157,22 @@ var_dump($foo->misc); // Same as what we set earlier
 ```
 
 You can execute complex queries using [native queries](http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/reference/native-sql.html).
-Checkout [the PostgreSQL documentation](http://www.postgresql.org/docs/current/static/datatype-json.html) to learn how to query the stored JSON document.
-
-MySQL support is coming (see the FAQ).
+Checkout [the PostgreSQL documentation](http://www.postgresql.org/docs/current/static/datatype-json.html) or [the MySQL](https://dev.mysql.com/doc/refman/en/json.html)
+one to learn how to query the stored JSON document.
 
 ## FAQ
 
 **What DBMS are supported?**
 
-PostgreSQL and MySQL are supported.
+PostgreSQL 9.4+ and MySQL 5.7+ are supported.
+
+**Which versions of Doctrine are supported?**
+
+Doctrine ORM 2.6+ and DBAL 2.6+ are supported.
+
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
-First, be sure to use Postgres >= 9.4, Doctrine ORM >= 2.6 (dev) and DBAL >= 2.6 (dev).
 Then, you need to set an option of in the column mapping:
 
 ```php
@@ -189,16 +192,22 @@ Yes.
 
 ## Run tests
 
+To execute the test suite, you need running PostgreSQL and MySQL servers.
 Run the following commands in your shell to set mandatory environment variables:
 
-    export SYMFONY__POSTGRESQL_HOST=127.0.0.1
-    export SYMFONY__POSTGRESQL_USER=dunglas
-    export SYMFONY__POSTGRESQL_PASSWORD=
-    export SYMFONY__POSTGRESQL_DBNAME=my_test_db
+    export POSTGRESQL_HOST=127.0.0.1
+    export POSTGRESQL_USER=dunglas
+    export POSTGRESQL_PASSWORD=
+    export POSTGRESQL_DBNAME=my_test_db
 
-The database must exist. Be careful, its content may be deleted.
+    export MYSQL_HOST=127.0.0.1
+    export MYSQL_USER=dunglas
+    export MYSQL_PASSWORD=
+    export MYSQL_=DBNAME="my_test_db
 
-Run the test suite using [PHPUnit](https://phpunit.de/):
+Databases must exist. Be careful, its content may be deleted.
+
+Run the test suite, execute [PHPUnit](https://phpunit.de/):
 
     phpunit
 

@@ -47,13 +47,14 @@ class AppKernel extends Kernel
             'test' => null,
         ]);
 
+        $db = getenv('DB');
         $c->loadFromExtension('doctrine', [
             'dbal' => [
-                'driver' => 'pdo_pgsql',
-                'host' => getenv('POSTGRESQL_HOST'),
-                'dbname' => getenv('POSTGRESQL_DBNAME'),
-                'user' => getenv('POSTGRESQL_USER'),
-                'password' => getenv('POSTGRESQL_PASSWORD'),
+                'driver' => 'MYSQL' === $db ? 'pdo_mysql' : 'pdo_pgsql',
+                'host' => getenv("{$db}_HOST"),
+                'dbname' => getenv("{$db}_DBNAME"),
+                'user' => getenv("{$db}_USER"),
+                'password' => getenv("{$db}_PASSWORD"),
                 'charset' => 'UTF8',
             ],
             'orm' => [
