@@ -109,7 +109,7 @@ final class JsonDocumentType extends JsonArrayType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (null === $value) {
+        if (null === $value || $value === '') {
             return;
         }
 
