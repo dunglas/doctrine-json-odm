@@ -9,10 +9,10 @@ services:
 
 env:
   global:
-    - SYMFONY__POSTGRESQL_HOST="127.0.0.1"
-    - SYMFONY__POSTGRESQL_USER="postgres"
-    - SYMFONY__POSTGRESQL_PASSWORD=""
-    - SYMFONY__POSTGRESQL_DBNAME="travis_ci_test"
+    - POSTGRESQL_HOST="127.0.0.1"
+    - POSTGRESQL_USER="postgres"
+    - POSTGRESQL_PASSWORD=""
+    - POSTGRESQL_DBNAME="travis_ci_test"
 
 php:
     - 5.5
@@ -25,6 +25,8 @@ matrix:
     include:
         - php: 7.1
           env: deps=low
+        - php: 7.1
+          env: deps=beta
 
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
@@ -32,7 +34,8 @@ before_install:
 
 install:
     - composer update --no-interaction --prefer-dist
-    - if [[ ! $deps ]]; then composer update --prefer-dist --no-progress --no-suggest --ansi; fi
+    - if [[ $deps = 'beta' ]]; then composer config minimum-stability beta; fi;
+    - if [[ $deps != 'low' ]]; then composer update --prefer-dist --no-progress --no-suggest --ansi; fi
     - if [[ $deps = 'low' ]]; then composer update --prefer-dist --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi; fi
 
 script:

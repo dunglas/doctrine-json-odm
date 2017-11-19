@@ -17,6 +17,7 @@
 
     <php>
         <server name="KERNEL_DIR" value="tests/Fixtures" />
+        <server name="KERNEL_CLASS" value="AppKernel" />
     </php>
 
     <filter>
