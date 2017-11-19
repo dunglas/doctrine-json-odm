@@ -11,14 +11,31 @@ namespace Dunglas\DoctrineJsonOdm\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonArrayType;
+use Doctrine\DBAL\Types\JsonType;
 use Symfony\Component\Serializer\SerializerInterface;
+
+if (class_exists(JsonType::class)) {
+    /**
+     * @internal
+     */
+    class InternalParentClass extends JsonType
+    {
+    }
+} else {
+    /**
+     * @internal
+     */
+    class InternalParentClass extends JsonArrayType
+    {
+    }
+}
 
 /**
  * The JSON document type.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-final class JsonDocumentType extends JsonArrayType
+final class JsonDocumentType extends InternalParentClass
 {
     /**
      * @var SerializerInterface

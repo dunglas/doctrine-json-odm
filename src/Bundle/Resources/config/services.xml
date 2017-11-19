@@ -11,7 +11,7 @@
             <argument type="service" id="dunglas_doctrine_json_odm.normalizer.raw_object" />
         </service>
 
-        <service id="dunglas_doctrine_json_odm.serializer" class="Symfony\Component\Serializer\Serializer">
+        <service id="dunglas_doctrine_json_odm.serializer" class="Symfony\Component\Serializer\Serializer" public="true">
             <argument type="collection">
                 <argument type="service" id="dunglas_doctrine_json_odm.normalizer.object" />
             </argument>
