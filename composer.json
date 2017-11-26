@@ -15,20 +15,18 @@
   "require": {
     "php": ">=5.5.9",
     "doctrine/orm": "^2.5",
+    "symfony/property-access": "^2.8 || ^3.0 || ^4.0",
+    "symfony/property-info": "^2.8 || ^3.0 || ^4.0",
     "symfony/serializer": "^2.8 || ^3.0 || ^4.0"
   },
   "require-dev": {
     "doctrine/doctrine-bundle": "^1.6",
     "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0",
     "symfony/finder": "^2.8 || ^3.0 || ^4.0",
-    "symfony/framework-bundle": "^2.8 || ^3.0 || ^4.0",
-    "symfony/property-access": "^2.8 || ^3.0 || ^4.0",
-    "symfony/property-info": "^2.8 || ^3.0 || ^4.0"
+    "symfony/framework-bundle": "^2.8 || ^3.0 || ^4.0"
   },
   "suggest": {
-    "symfony/symfony": "To use the provided bundle.",
-    "symfony/property-access": "To support complex objects.",
-    "symfony/property-info": "To support complex objects."
+    "symfony/framework-bundle": "To use the provided bundle."
   },
   "autoload": {
     "psr-4": { "Dunglas\\DoctrineJsonOdm\\": "src/" }
