@@ -1,6 +1,6 @@
 # Doctrine JSON ODM
 
-An Object-Document Mapper (ODM) for Doctrine ORM leveraging new JSON types of modern RDBMS.
+An Object-Document Mapper (ODM) for [Doctrine ORM](http://www.doctrine-project.org/projects/orm.html) leveraging new JSON types of modern RDBMS.
 
 [![Build Status](https://travis-ci.org/dunglas/doctrine-json-odm.svg?branch=master)](https://travis-ci.org/dunglas/doctrine-json-odm)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/?branch=master)
@@ -21,6 +21,47 @@ It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and the JSON column 
 For more information about concepts behind Doctrine JSON ODM, take a look at [the presentation given by Benjamin Eberlei at Symfony Catalunya 2016](https://qafoo.com/resources/presentations/symfony_catalunya_2016/doctrine_orm_and_nosql.html).
 
 ## Install
+
+If you are using [Symfony](https://symfony.com) or [API Platform](https://api-platform.com), jump to the next section to learn how to install the provided bundle.
+If you use Doctrine directly, use a bootstrap code similar to the following:
+
+```php
+<?php
+
+require_once __DIR__.'/../vendor/autoload.php'; // Adapt to your path
+
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+use Dunglas\DoctrineJsonOdm\Normalizer\ObjectNormalizer;
+use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer as BaseObjectNormalizer;
+
+if (!Type::hasType('json_document')) {
+    Type::addType('json_document', JsonDocumentType::class);
+    Type::getType('json_document')->setSerializer(
+        new Serializer([new ObjectNormalizer(new BaseObjectNormalizer())], [new JsonEncoder()])
+    );
+}
+
+// Sample bootstrapping code here, adapt to fit your needs
+$isDevMode = true;
+$config = Setup::createAnnotationMetadataConfiguration([__DIR__ . "/../src"], $_ENV['DEBUG'] ?? false); // Adapt to your path
+
+$conn = [
+    'dbname' => $_ENV['DATABASE_NAME'],
+    'user' => $_ENV['DATABASE_USER'],
+    'password' => $_ENV['DATABASE_PASSWORD'],
+    'host' => $_ENV['DATABASE_HOST'],
+    'driver' => 'pdo_mysql' // or pdo_pgsql
+];
+
+return EntityManager::create($conn, $config);
+```
+
+## Install with Symfony
 
 The library comes with a bundle for the [Symfony](https://symfony.com) framework.
 
@@ -49,8 +90,6 @@ class AppKernel extends Kernel
 }
 ```
 
-Doctrine JSON ODM can also be used standalone, without any framework, but the documentation hasn't been redacted yet (PRs welcome!).
-
 ## Usage
 
 Doctrine JSON ODM provides a `json_document` column type for properties of Doctrine entities.
@@ -65,7 +104,6 @@ All PHP objects and structures will be preserved (if you use Symfony >= 3.1, see
 You can store any type of (serializable) PHP data structures in properties mapped using the `json_document` type.
 
 Example:
-
 
 ```php
 namespace AppBundle\Entity;
@@ -169,7 +207,6 @@ PostgreSQL 9.4+ and MySQL 5.7+ are supported.
 **Which versions of Doctrine are supported?**
 
 Doctrine ORM 2.6+ and DBAL 2.6+ are supported.
-
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
