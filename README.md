@@ -20,7 +20,7 @@ It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and the JSON column 
 
 For more information about concepts behind Doctrine JSON ODM, take a look at [the presentation given by Benjamin Eberlei at Symfony Catalunya 2016](https://qafoo.com/resources/presentations/symfony_catalunya_2016/doctrine_orm_and_nosql.html).
 
-## Install
+## Install with Symfony
 
 The library comes with a bundle for the [Symfony](https://symfony.com) framework.
 
@@ -49,7 +49,51 @@ class AppKernel extends Kernel
 }
 ```
 
-Doctrine JSON ODM can also be used standalone, without any framework, but the documentation hasn't been redacted yet (PRs welcome!).
+### Install in Doctrine
+
+If you want to use the library directly in `Doctrine 2` without Symfony you should edit your `bootstrap.php` like:
+
+```php
+<?php
+
+require_once __DIR__."/../vendor/autoload.php"; // Adapt to your path
+
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
+
+if (!Type::hasType('json_document')) {
+
+    Type::addType('json_document', JsonDocumentType::class);
+    $type = Type::getType('json_document');
+
+    $serializer = new \Symfony\Component\Serializer\Serializer([
+        new \Dunglas\DoctrineJsonOdm\Normalizer\ObjectNormalizer(
+            new \Symfony\Component\Serializer\Normalizer\ObjectNormalizer()
+        )
+    ], [new \Symfony\Component\Serializer\Encoder\JsonEncoder()]);
+
+    $type->setSerializer($serializer);
+}
+
+
+$isDevMode = true;
+$config = Setup::createAnnotationMetadataConfiguration([__DIR__ . "/../src"], $isDevMode); // Adapt to your path
+
+$conn = [
+    'dbname' => 'MyDb',
+    'user' => 'MyUser',
+    'password' => 'MyPassword',
+    'host' => 'MyHost',
+    'driver' => 'pdo_mysql' // or pdo_pgsql
+];
+
+$entityManager = EntityManager::create($conn, $config);
+return $entityManager;
+
+```
+
 
 ## Usage
 
