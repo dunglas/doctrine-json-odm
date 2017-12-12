@@ -20,9 +20,9 @@ It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and the JSON column 
 
 For more information about concepts behind Doctrine JSON ODM, take a look at [the presentation given by Benjamin Eberlei at Symfony Catalunya 2016](https://qafoo.com/resources/presentations/symfony_catalunya_2016/doctrine_orm_and_nosql.html).
 
-### Install
+## Install
 
-If you are a Symfony user, see the specifc installation notes in the next section.
+If you are using [Symfony](https://symfony.com) or [API Platform](https://api-platform.com), jump to the next section to learn how to install the provided bundle.
 If you use Doctrine directly, use a bootstrap code similar to the following:
 
 ```php
@@ -104,7 +104,6 @@ All PHP objects and structures will be preserved (if you use Symfony >= 3.1, see
 You can store any type of (serializable) PHP data structures in properties mapped using the `json_document` type.
 
 Example:
-
 
 ```php
 namespace AppBundle\Entity;
@@ -208,7 +207,6 @@ PostgreSQL 9.4+ and MySQL 5.7+ are supported.
 **Which versions of Doctrine are supported?**
 
 Doctrine ORM 2.6+ and DBAL 2.6+ are supported.
-
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
