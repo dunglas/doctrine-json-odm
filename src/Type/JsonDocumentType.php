@@ -136,6 +136,14 @@ final class JsonDocumentType extends InternalParentClass
     /**
      * {@inheritdoc}
      */
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'json_document';
