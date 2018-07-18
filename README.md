@@ -227,6 +227,23 @@ Then, you need to set an option of in the column mapping:
 
 Yes.
 
+**How can I add additional normalizers?**
+
+The Symfony Serializer is easily extensible. This bundle registers and uses a service with ID `dunglas_doctrine_json_odm.serializer` as the serializer for the JSON type. This means we can easily override it in our `services.yaml` to use additional normalizers.
+As an example we use the Symfony `DateTimeNormalizer` service so we do have support for any property that is an instance of `\DateTimeInterface`. Be aware that the order of the normalizers might be relevant depending on the normalizers you use.
+
+```yaml
+    # Add DateTime Normalizer to Dunglas' Doctrine JSON ODM Bundle
+    dunglas_doctrine_json_odm.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+          - ['@serializer.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.object']
+          - ['@serializer.encoder.json']
+        public: true
+```
+
+As a side note: If you happen to use [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html) in your `services.yaml` you might need to set `autowire: false` too.
+
 ## Run tests
 
 To execute the test suite, you need running PostgreSQL and MySQL servers.
