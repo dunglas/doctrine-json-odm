@@ -68,7 +68,6 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
             $type = $data['#type'];
             unset($data['#type']);
 
-            $data = $this->denormalize($data, $type, $format, $context);
             $data = $this->objectNormalizer->denormalize($data, $type, $format, $context);
 
             return $data;
