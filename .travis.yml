@@ -17,7 +17,7 @@ env:
     - MYSQL_HOST="127.0.0.1"
     - MYSQL_USER="root"
     - MYSQL_PASSWORD=""
-    - MYSQL_=DBNAME="travis_ci_test"
+    - MYSQL_DBNAME="travis_ci_test"
 
 php:
     - 5.5

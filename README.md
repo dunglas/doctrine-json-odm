@@ -240,7 +240,7 @@ Run the following commands in your shell to set mandatory environment variables:
     export MYSQL_HOST=127.0.0.1
     export MYSQL_USER=dunglas
     export MYSQL_PASSWORD=
-    export MYSQL_=DBNAME="my_test_db
+    export MYSQL_DBNAME="my_test_db
 
 Databases must exist. Be careful, its content may be deleted.
 
