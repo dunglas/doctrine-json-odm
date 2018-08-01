@@ -150,4 +150,23 @@ class FunctionalTest extends KernelTestCase
 
         $this->assertEquals($misc, $foo->getMisc());
     }
+
+    public function testNullIsStoredAsNull()
+    {
+        $product = new Product();
+        $product->name = 'My product';
+        $product->attributes = null;
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+        $manager->persist($product);
+        $manager->flush();
+        $manager->clear();
+
+        $connection = $manager->getConnection();
+
+        $stmt = $connection->prepare('SELECT * FROM product');
+        $stmt->execute();
+
+        $this->assertNull($stmt->fetch()['attributes']);
+    }
 }

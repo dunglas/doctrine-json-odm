@@ -118,6 +118,10 @@ final class JsonDocumentType extends InternalParentClass
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if (null === $value) {
+            return;
+        }
+
         return $this->getSerializer()->serialize($value, $this->format, $this->serializationContext);
     }
 

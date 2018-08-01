@@ -31,7 +31,7 @@ class Product
     public $name;
 
     /**
-     * @ORM\Column(type="json_document", options={"jsonb": true})
+     * @ORM\Column(type="json_document", options={"jsonb": true}, nullable=true)
      */
     public $attributes;
 }
