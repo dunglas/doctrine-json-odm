@@ -136,7 +136,7 @@ final class JsonDocumentType extends InternalParentClass
 
         return $this->getSerializer()->deserialize($value, '', $this->format, $this->deserializationContext);
     }
-      
+
     /**
      * {@inheritdoc}
      */
@@ -144,7 +144,7 @@ final class JsonDocumentType extends InternalParentClass
     {
         return sprintf('JSON');
     }
-    
+
     /**
      * {@inheritdoc}
      */
