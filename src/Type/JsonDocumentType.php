@@ -136,7 +136,15 @@ final class JsonDocumentType extends InternalParentClass
 
         return $this->getSerializer()->deserialize($value, '', $this->format, $this->deserializationContext);
     }
-
+      
+    /**
+     * {@inheritdoc}
+     */
+    public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    {
+        return sprintf('JSON');
+    }
+    
     /**
      * {@inheritdoc}
      */
