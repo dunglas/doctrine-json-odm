@@ -142,7 +142,7 @@ final class JsonDocumentType extends InternalParentClass
      */
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return sprintf('JSON');
+        return 'JSON';
     }
 
     /**
