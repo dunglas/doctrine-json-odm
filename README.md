@@ -52,7 +52,7 @@ if (!Type::hasType('json_document')) {
 
 // Sample bootstrapping code here, adapt to fit your needs
 $isDevMode = true;
-$config = Setup::createAnnotationMetadataConfiguration([__DIR__ . "/../src"], $_ENV['DEBUG'] ?? false); // Adapt to your path
+$config = Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src'], $_ENV['DEBUG'] ?? false); // Adapt to your path
 
 $conn = [
     'dbname' => $_ENV['DATABASE_NAME'],
