@@ -22,7 +22,11 @@ For more information about concepts behind Doctrine JSON ODM, take a look at [th
 
 ## Install
 
-If you are using [Symfony](https://symfony.com) or [API Platform](https://api-platform.com), jump to the next section to learn how to install the provided bundle.
+To install the library, use [Composer](https://getcomposer.org/), the PHP package manager:
+
+    composer require dunglas/doctrine-json-odm
+
+If you are using [Symfony 4+](https://symfony.com) or [API Platform](https://api-platform.com), you have nothing more to do!
 If you use Doctrine directly, use a bootstrap code similar to the following:
 
 ```php
@@ -61,9 +65,9 @@ $conn = [
 return EntityManager::create($conn, $config);
 ```
 
-## Install with Symfony
+## Install with Symfony 2 and 3
 
-The library comes with a bundle for the [Symfony](https://symfony.com) framework.
+The library comes with a bundle for the [Symfony](https://symfony.com) framework. If you use Symfony 4+, it is automatically registered. For Symfony 2 and 3, you must register it yourself:
 
 ```php
 // ...
