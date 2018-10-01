@@ -198,7 +198,7 @@ $foo = $entityManager->find(Foo::class, $foo->getId());
 var_dump($foo->misc); // Same as what we set earlier
 ```
 
-You can execute complex queries using [native queries](http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/reference/native-sql.html).
+You can execute complex queries using [native queries](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/native-sql.html).
 Checkout [the PostgreSQL documentation](http://www.postgresql.org/docs/current/static/datatype-json.html) or [the MySQL](https://dev.mysql.com/doc/refman/en/json.html)
 one to learn how to query the stored JSON document.
 
