@@ -35,6 +35,7 @@ matrix:
 
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
+    - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - psql -c 'create database travis_ci_test;' -U postgres
     - mysql -e 'CREATE DATABASE travis_ci_test;'
 
