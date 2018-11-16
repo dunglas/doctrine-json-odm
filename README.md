@@ -271,5 +271,5 @@ Run the test suite, execute [PHPUnit](https://phpunit.de/):
 
 ## Credits
 
-This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr), [Yanick Witschi]](https://github.com/Toflar) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
+This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr), [Yanick Witschi](https://github.com/Toflar) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
 Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
