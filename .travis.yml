@@ -37,6 +37,8 @@ matrix:
           env: deps=low
         - php: 7.2
           env: deps=beta
+    allow_failures:
+        - env: deps=beta
 
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
