@@ -25,6 +25,7 @@ php:
     - 7.0
     - 7.1
     - 7.2
+    - nightly
 
 matrix:
     fast_finish: true
@@ -39,6 +40,7 @@ matrix:
           env: deps=beta
     allow_failures:
         - env: deps=beta
+        - php: nightly
 
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
