@@ -140,14 +140,6 @@ final class JsonDocumentType extends InternalParentClass
     /**
      * {@inheritdoc}
      */
-    public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return 'JSON';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         return true;
