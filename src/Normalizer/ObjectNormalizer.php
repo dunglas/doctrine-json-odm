@@ -65,7 +65,7 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
 	 */
 	public function denormalize($data, $class, $format = null, array $context = [])
 	{
-		if (isset($context[self::WONT_DENORMALIZE]) || \is_object($data) || !\is_iterable($data)) {
+		if (!\is_iterable($data) || isset($context[self::WONT_DENORMALIZE]) || \is_object($data)) {
 			return $data;
 		}
 
