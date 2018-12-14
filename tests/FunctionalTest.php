@@ -189,8 +189,6 @@ class FunctionalTest extends KernelTestCase
 		$product2->name = 'product2';
 		$product2->attributes = $attribute;
 
-		$manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
-
 		$manager->persist($product2);
 		$manager->flush();
 		$manager->clear();
