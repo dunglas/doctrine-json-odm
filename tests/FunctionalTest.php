@@ -169,4 +169,35 @@ class FunctionalTest extends KernelTestCase
 
         $this->assertNull($stmt->fetch()['attributes']);
     }
+
+	public function testAdditionalNormalizer()
+	{
+		$product1 = new Product();
+		$product1->name = 'product1';
+
+		$manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+
+		$manager->persist($product1);
+		$manager->flush();
+		$manager->clear();
+
+		$attribute = new Attribute();
+		$attribute->key = 'product1Entity';
+		$attribute->value = $product1;
+
+		$product2 = new Product();
+		$product2->name = 'product2';
+		$product2->attributes = $attribute;
+
+		$manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+
+		$manager->persist($product2);
+		$manager->flush();
+		$manager->clear();
+
+		/** @var Product $retrievedProduct */
+		$retrievedProduct = $manager->find(Product::class, $product2->id);
+
+		$this->assertEquals($product1, $retrievedProduct->attributes->value);
+	}
 }

@@ -13,12 +13,17 @@
             <argument type="service" id="serializer.mapping.class_discriminator_resolver" on-invalid="ignore" />
         </service>
 
+        <service id="dunglas_doctrine_json_odm.normalizer.test" class="Dunglas\DoctrineJsonOdm\Normalizer\ProductNormalizerTest" public="false">
+            <argument type="service" id="Doctrine\ORM\EntityManagerInterface" />
+        </service>
+
         <service id="dunglas_doctrine_json_odm.normalizer.object" class="Dunglas\DoctrineJsonOdm\Normalizer\ObjectNormalizer" public="false">
             <argument type="service" id="dunglas_doctrine_json_odm.normalizer.raw_object" />
         </service>
 
         <service id="dunglas_doctrine_json_odm.serializer" class="Symfony\Component\Serializer\Serializer" public="true">
             <argument type="collection">
+                <argument type="service" id="dunglas_doctrine_json_odm.normalizer.test" />
                 <argument type="service" id="dunglas_doctrine_json_odm.normalizer.object" />
             </argument>
 
