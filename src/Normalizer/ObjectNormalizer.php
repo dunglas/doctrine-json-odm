@@ -10,6 +10,7 @@
 namespace Dunglas\DoctrineJsonOdm\Normalizer;
 
 use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
+final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface, CacheableSupportsMethodInterface
 {
     /**
      * @var NormalizerInterface|DenormalizerInterface
@@ -108,4 +109,12 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
             $this->objectNormalizer->setSerializer($serializer);
         }
     }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function hasCacheableSupportsMethod(): bool
+	{
+		return true;
+	}
 }
