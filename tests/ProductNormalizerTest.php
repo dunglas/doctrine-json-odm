@@ -1,9 +1,10 @@
 <?php
 
-namespace Dunglas\DoctrineJsonOdm\Normalizer;
+namespace Dunglas\DoctrineJsonOdm\Tests;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Dunglas\DoctrineJsonOdm\Normalizer\ObjectNormalizer;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
