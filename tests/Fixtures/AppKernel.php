@@ -64,13 +64,13 @@ class AppKernel extends Kernel
             ],
         ]);
 
-	    $testNormalizerDefinition = $c->register('dunglas_doctrine_json_odm.normalizer.product_normalizer', 'Dunglas\DoctrineJsonOdm\Tests\ProductNormalizerTest');
-	    $testNormalizerDefinition->addArgument(new Reference('Doctrine\ORM\EntityManagerInterface'));
+        $testNormalizerDefinition = $c->register('dunglas_doctrine_json_odm.normalizer.product_normalizer', 'Dunglas\DoctrineJsonOdm\Tests\ProductNormalizerTest');
+        $testNormalizerDefinition->addArgument(new Reference('Doctrine\ORM\EntityManagerInterface'));
 
-	    $c->getExtension('dunglas_doctrine_json_odm')->load([], $c);
-	    $jsonOdmDef = $c->findDefinition('dunglas_doctrine_json_odm.serializer');
-	    $normalizers = $jsonOdmDef->getArgument(0);
-	    array_unshift($normalizers, new Reference('dunglas_doctrine_json_odm.normalizer.product_normalizer'));
-	    $jsonOdmDef->setArgument(0, $normalizers);
+        $c->getExtension('dunglas_doctrine_json_odm')->load([], $c);
+        $jsonOdmDef = $c->findDefinition('dunglas_doctrine_json_odm.serializer');
+        $normalizers = $jsonOdmDef->getArgument(0);
+        array_unshift($normalizers, new Reference('dunglas_doctrine_json_odm.normalizer.product_normalizer'));
+        $jsonOdmDef->setArgument(0, $normalizers);
     }
 }

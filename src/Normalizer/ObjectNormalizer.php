@@ -124,20 +124,20 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     private function denormalizeObject(array $data, string $class, $format = null, array $context = [])
     {
-    	// Try to denormalize in other normalizers. Necessary to avoid cycle
-	    $context[self::WONT_DENORMALIZE] = true;
-	    if (\is_object($denormalizedValue = $this->serializer->denormalize($data, $class, $format, $context))) {
-	    	return $denormalizedValue;
-	    }
+        // Try to denormalize in other normalizers. Necessary to avoid cycle
+        $context[self::WONT_DENORMALIZE] = true;
+        if (\is_object($denormalizedValue = $this->serializer->denormalize($data, $class, $format, $context))) {
+            return $denormalizedValue;
+        }
 
-	    // Denormalize in current default normalizer
-	    unset($context[self::WONT_DENORMALIZE]);
+        // Denormalize in current default normalizer
+        unset($context[self::WONT_DENORMALIZE]);
 
-	    foreach ($data as $key => $value) {
-		    $data[$key] = $this->denormalizeValue($value, $class, $format, $context);
-	    }
+        foreach ($data as $key => $value) {
+            $data[$key] = $this->denormalizeValue($value, $class, $format, $context);
+        }
 
-	    return $this->objectNormalizer->denormalize($data, $class, $format, $context);
+        return $this->objectNormalizer->denormalize($data, $class, $format, $context);
     }
 
     /**
