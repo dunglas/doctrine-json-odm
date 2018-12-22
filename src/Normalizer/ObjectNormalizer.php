@@ -124,26 +124,14 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     private function denormalizeObject(array $data, string $class, $format = null, array $context = [])
     {
-        return $this->denormalizeObjectInOtherNormalizer($data, $class, $format, $context)
-            ?? $this->denormalizeObjectInDefaultObjectNormalizer($data, $class, $format, $context);
-    }
+	    $context[self::WONT_DENORMALIZE] = true;
+	    if (\is_object($denormalizedValue = $this->serializer->denormalize($data, $class, $format, $context))) {
+	    	return $denormalizedValue;
+	    }
 
-    /**
-     * Tries to convert data to $class' object not using current normalizer.
-     * This is useful if you have your own normalizers - they will have priority over this one.
-     *
-     * @param array  $data
-     * @param string $class
-     * @param null   $format
-     * @param array  $context
-     *
-     * @return object|null
-     */
-    private function denormalizeObjectInOtherNormalizer(array $data, string $class, $format = null, array $context = [])
-    {
-        $context[self::WONT_DENORMALIZE] = true;
+	    unset($context[self::WONT_DENORMALIZE]);
 
-        return \is_object($object = $this->serializer->denormalize($data, $class, $format, $context)) ? $object : null;
+	    return $this->denormalizeObjectInDefaultObjectNormalizer($data, $class, $format, $context);
     }
 
     /**
