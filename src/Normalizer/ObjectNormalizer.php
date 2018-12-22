@@ -124,33 +124,20 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     private function denormalizeObject(array $data, string $class, $format = null, array $context = [])
     {
+    	// Try to denormalize in other normalizers. Necessary to avoid cycle
 	    $context[self::WONT_DENORMALIZE] = true;
 	    if (\is_object($denormalizedValue = $this->serializer->denormalize($data, $class, $format, $context))) {
 	    	return $denormalizedValue;
 	    }
 
+	    // Denormalize in current default normalizer
 	    unset($context[self::WONT_DENORMALIZE]);
 
-	    return $this->denormalizeObjectInDefaultObjectNormalizer($data, $class, $format, $context);
-    }
+	    foreach ($data as $key => $value) {
+		    $data[$key] = $this->denormalizeValue($value, $class, $format, $context);
+	    }
 
-    /**
-     * Default denormalization $data to class using symfony's object normalizer.
-     *
-     * @param array  $data
-     * @param string $class
-     * @param null   $format
-     * @param array  $context
-     *
-     * @return object
-     */
-    private function denormalizeObjectInDefaultObjectNormalizer(array $data, string $class, $format = null, array $context = [])
-    {
-        foreach ($data as $key => $value) {
-            $data[$key] = $this->denormalizeValue($value, $class, $format, $context);
-        }
-
-        return $this->objectNormalizer->denormalize($data, $class, $format, $context);
+	    return $this->objectNormalizer->denormalize($data, $class, $format, $context);
     }
 
     /**
