@@ -17,16 +17,14 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Transforms an object to an array with the following keys:
- * * _type: the class name
- * * _value: a representation of the values of the object.
+ * Transforms an object to an array.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
 final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface, CacheableSupportsMethodInterface
 {
     // To not use the current normalizer
-    const WONT_DENORMALIZE = 'wont_denormalize';
+    const WONT_DENORMALIZE = 'dunglas_normalizer_wont_denormalize';
     const TYPE_FIELD = '#type';
 
     /**
@@ -195,9 +193,9 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      *
      * @return string|null
      */
-    private function extractType(&$data): ?string
+    private function extractType(&$data)
     {
-        if (!$this->isObjectArray($data)) {
+        if (!isset($data[self::TYPE_FIELD])) {
             return null;
         }
 
@@ -205,17 +203,5 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
         unset($data[self::TYPE_FIELD]);
 
         return $type;
-    }
-
-    /**
-     * To determine is passed data is a representation of some object.
-     *
-     * @param $data
-     *
-     * @return bool
-     */
-    private function isObjectArray($data): bool
-    {
-        return isset($data[self::TYPE_FIELD]);
     }
 }
