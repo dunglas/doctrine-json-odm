@@ -26,7 +26,8 @@
     "symfony/phpunit-bridge": "^3.3 || ^4.0"
   },
   "suggest": {
-    "symfony/framework-bundle": "To use the provided bundle."
+    "symfony/framework-bundle": "To use the provided bundle.",
+    "scienta/doctrine-json-functions": "To run JSON functions inside query builders."
   },
   "autoload": {
     "psr-4": { "Dunglas\\DoctrineJsonOdm\\": "src/" }
