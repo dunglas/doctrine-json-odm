@@ -27,7 +27,7 @@
   },
   "suggest": {
     "symfony/framework-bundle": "To use the provided bundle.",
-    "scienta/doctrine-json-functions": "To run JSON functions inside query builders."
+    "scienta/doctrine-json-functions": "To add support for JSON functions in DQL."
   },
   "autoload": {
     "psr-4": { "Dunglas\\DoctrineJsonOdm\\": "src/" }

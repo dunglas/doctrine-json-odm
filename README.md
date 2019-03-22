@@ -228,12 +228,11 @@ Then, you need to set an option of in the column mapping:
 
 Yes.
 
-**Can I use native [MySQL](https://dev.mysql.com/doc/refman/en/json.html) / [PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html) JSON functions?**
+**Can I use the native [PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html) and [MySQL](https://dev.mysql.com/doc/refman/en/json.html) /JSON functions?**
 
+Yes! You can execute complex queries using [native queries](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/native-sql.html). 
 
-You can execute complex queries using [native queries](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/native-sql.html). 
-
-To run JSON functions inside query builders or DQL statements, have a look at [scienta/doctrine-json-functions](https://github.com/ScientaNL/DoctrineJsonFunctions)
+Alternatively, install [scienta/doctrine-json-functions](https://github.com/ScientaNL/DoctrineJsonFunctions) to be able to use run JSON functions in DQL and query builders.
 .
 
 **How can I add additional normalizers?**
