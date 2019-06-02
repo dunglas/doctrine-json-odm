@@ -202,6 +202,10 @@ You can execute complex queries using [native queries](https://www.doctrine-proj
 Checkout [the PostgreSQL documentation](http://www.postgresql.org/docs/current/static/datatype-json.html) or [the MySQL](https://dev.mysql.com/doc/refman/en/json.html)
 one to learn how to query the stored JSON document.
 
+### Limitations when updating nested properties
+
+Due to how Doctrine works, it will not detect changes to nested objects or properties. The reason for this is that Doctrine compares objects by reference to optimize `UPDATE` queries. If you experience problems where no `UPDATE` queries are executed, you might need to `clone` the object before you set it. That way Doctrine will notice the change. See https://github.com/dunglas/doctrine-json-odm/issues/21 for more information.
+
 ## FAQ
 
 **What DBMS are supported?**
