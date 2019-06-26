@@ -44,7 +44,9 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        return array_merge(['#type' => ClassUtils::getClass($object)], $this->objectNormalizer->normalize($object, $format, $context));
+        $data = $this->objectNormalizer->normalize($object, $format, $context);
+
+        return array_merge(['#type' => ClassUtils::getClass($object)], is_scalar($data) ? ['#scalar' => $data] : $data);
     }
 
     /**
@@ -68,6 +70,7 @@ final class ObjectNormalizer implements NormalizerInterface, DenormalizerInterfa
             $type = $data['#type'];
             unset($data['#type']);
 
+            $data = isset($data['#scalar']) ? $data['#scalar'] : $data;
             $data = $this->denormalize($data, $type, $format, $context);
             $data = $this->objectNormalizer->denormalize($data, $type, $format, $context);
 
