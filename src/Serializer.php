@@ -35,12 +35,12 @@ class Serializer extends BaseSerializer
             $type = $data[self::KEY_TYPE];
             unset($data[self::KEY_TYPE]);
 
-            $data = isset($data[self::KEY_SCALAR]) ? $data[self::KEY_SCALAR] : $data;
+            $data = $data[self::KEY_SCALAR] ?? $data;
             $data = $this->denormalize($data, $type, $format, $context);
             return parent::denormalize($data, $type, $format, $context);
         }
 
-        if (is_array($data) || $data instanceof \Traversable) {
+        if (is_iterable($data)) {
             $class = ($class === '') ? 'stdClass' : $class;
             return parent::denormalize($data, $class.'[]', $format, $context);
         }
