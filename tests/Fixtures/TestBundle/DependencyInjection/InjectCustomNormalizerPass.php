@@ -22,7 +22,8 @@ class InjectCustomNormalizerPass implements CompilerPassInterface
         $container->setDefinition('dunglas_doctrine_json_odm.normalizer.custom', new Definition(CustomNormalizer::class));
 
         $serializerDefinition = $container->getDefinition('dunglas_doctrine_json_odm.serializer');
-        $normalizers = array_merge([new Reference('dunglas_doctrine_json_odm.normalizer.custom')], $serializerDefinition->getArgument(0));
-        $serializerDefinition->setArgument(0, $normalizers);
+        $arguments = $serializerDefinition->getArguments();
+        $arguments[0] = array_merge([new Reference('dunglas_doctrine_json_odm.normalizer.custom')], $arguments[0]);
+        $serializerDefinition->setArguments($arguments);
     }
 }
