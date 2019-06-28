@@ -198,9 +198,6 @@ $foo = $entityManager->find(Foo::class, $foo->getId());
 var_dump($foo->misc); // Same as what we set earlier
 ```
 
-You can execute complex queries using [native queries](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/native-sql.html).
-Checkout [the PostgreSQL documentation](http://www.postgresql.org/docs/current/static/datatype-json.html) or [the MySQL](https://dev.mysql.com/doc/refman/en/json.html)
-one to learn how to query the stored JSON document.
 
 ### Limitations when updating nested properties
 
@@ -234,6 +231,13 @@ Then, you need to set an option of in the column mapping:
 **Does the ODM support nested objects and object graphs?**
 
 Yes.
+
+**Can I use the native [PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html) and [MySQL](https://dev.mysql.com/doc/refman/en/json.html) /JSON functions?**
+
+Yes! You can execute complex queries using [native queries](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/native-sql.html). 
+
+Alternatively, install [scienta/doctrine-json-functions](https://github.com/ScientaNL/DoctrineJsonFunctions) to be able to use run JSON functions in DQL and query builders.
+.
 
 **How can I add additional normalizers?**
 
