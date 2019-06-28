@@ -13,8 +13,8 @@ use Symfony\Component\Serializer\Serializer as BaseSerializer;
 
 class Serializer extends BaseSerializer
 {
-    const KEY_TYPE = '#type';
-    const KEY_SCALAR = '#scalar';
+    private const KEY_TYPE = '#type';
+    private const KEY_SCALAR = '#scalar';
 
     public function normalize($data, $format = null, array $context = [])
     {
