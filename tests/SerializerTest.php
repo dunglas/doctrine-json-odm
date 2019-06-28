@@ -14,6 +14,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -64,7 +65,9 @@ class SerializerTest extends KernelTestCase
         $baz->setName('Baz');
         $baz->setSize(7);
 
-        $misc = [$bar, $baz];
+        $scalarValue = new ScalarValue('foobar');
+
+        $misc = [$bar, $baz, $scalarValue];
 
         $foo = new Foo();
         $foo->setName('Foo');
@@ -123,5 +126,18 @@ class SerializerTest extends KernelTestCase
         $restoredMisc = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals(null, $restoredMisc);
+    }
+
+    public function testScalarIsStoredInScalarKey()
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $value = new ScalarValue('foobar');
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#scalar', $decodeData);
+        $this->assertSame($value->value(), $decodeData['#scalar']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
     }
 }

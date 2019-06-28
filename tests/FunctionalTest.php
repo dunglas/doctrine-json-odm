@@ -15,6 +15,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\StringInput;
@@ -81,7 +82,9 @@ class FunctionalTest extends KernelTestCase
         $baz->setName('Baz');
         $baz->setSize(7);
 
-        $misc = [$bar, $baz];
+        $scalarValue = new ScalarValue('foobar');
+
+        $misc = [$bar, $baz, $scalarValue];
 
         $foo = new Foo();
         $foo->setName('Foo');
