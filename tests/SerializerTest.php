@@ -49,8 +49,6 @@ class SerializerTest extends KernelTestCase
 
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $data = $serializer->serialize($attributes, 'json');
-        $legacySerializer = self::$kernel->getContainer()->get('legacy_dunglas_doctrine_json_odm.serializer');
-        $this->assertSame($data, $legacySerializer->serialize($attributes, 'json'));
         $restoredAttributes = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($attributes, $restoredAttributes);
@@ -74,8 +72,6 @@ class SerializerTest extends KernelTestCase
 
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $data = $serializer->serialize($misc, 'json');
-        $legacySerializer = self::$kernel->getContainer()->get('legacy_dunglas_doctrine_json_odm.serializer');
-        $this->assertSame($data, $legacySerializer->serialize($misc, 'json'));
         $restoredMisc = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($misc, $restoredMisc);
@@ -95,8 +91,6 @@ class SerializerTest extends KernelTestCase
 
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $data = $serializer->serialize($misc, 'json');
-        $legacySerializer = self::$kernel->getContainer()->get('legacy_dunglas_doctrine_json_odm.serializer');
-        $this->assertSame($data, $legacySerializer->serialize($misc, 'json'));
         $restoredMisc = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($misc, $restoredMisc);
@@ -117,8 +111,6 @@ class SerializerTest extends KernelTestCase
 
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $data = $serializer->serialize($misc, 'json');
-        $legacySerializer = self::$kernel->getContainer()->get('legacy_dunglas_doctrine_json_odm.serializer');
-        $this->assertSame($data, $legacySerializer->serialize($misc, 'json'));
         $restoredMisc = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($misc, $restoredMisc);
@@ -128,8 +120,6 @@ class SerializerTest extends KernelTestCase
     {
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $data = $serializer->serialize(null, 'json');
-        $legacySerializer = self::$kernel->getContainer()->get('legacy_dunglas_doctrine_json_odm.serializer');
-        $this->assertSame($data, $legacySerializer->serialize(null, 'json'));
         $restoredMisc = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals(null, $restoredMisc);
