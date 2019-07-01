@@ -11,7 +11,7 @@ namespace Dunglas\DoctrineJsonOdm;
 
 use Symfony\Component\Serializer\Serializer as BaseSerializer;
 
-class Serializer extends BaseSerializer
+final class Serializer extends BaseSerializer
 {
     private const KEY_TYPE = '#type';
     private const KEY_SCALAR = '#scalar';
