@@ -9,6 +9,8 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle;
 
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\InjectCustomNormalizerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -16,4 +18,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 final class TestBundle extends Bundle
 {
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new InjectCustomNormalizerPass());
+    }
 }

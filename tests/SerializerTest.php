@@ -14,16 +14,14 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Input\StringInput;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class FunctionalTest extends KernelTestCase
+class SerializerTest extends KernelTestCase
 {
     /**
      * @var Application
@@ -36,14 +34,6 @@ class FunctionalTest extends KernelTestCase
 
         $this->application = new Application(self::$kernel);
         $this->application->setAutoExit(false);
-
-        $this->runCommand('doctrine:schema:drop --force');
-        $this->runCommand('doctrine:schema:create');
-    }
-
-    private function runCommand($command)
-    {
-        return $this->application->run(new StringInput($command.' --no-interaction --quiet'));
     }
 
     public function testStoreAndRetrieveDocument()
@@ -58,18 +48,11 @@ class FunctionalTest extends KernelTestCase
 
         $attributes = [$attribute1, $attribute2];
 
-        $product = new Product();
-        $product->name = 'My product';
-        $product->attributes = $attributes;
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $data = $serializer->serialize($attributes, 'json');
+        $restoredAttributes = $serializer->deserialize($data, '', 'json');
 
-        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
-        $manager->persist($product);
-        $manager->flush();
-
-        $manager->clear();
-
-        $retrievedProduct = $manager->find(Product::class, $product->id);
-        $this->assertEquals($attributes, $retrievedProduct->attributes);
+        $this->assertEquals($attributes, $restoredAttributes);
     }
 
     public function testStoreAndRetrieveDocumentsOfVariousTypes()
@@ -90,14 +73,11 @@ class FunctionalTest extends KernelTestCase
         $foo->setName('Foo');
         $foo->setMisc($misc);
 
-        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
-        $manager->persist($foo);
-        $manager->flush();
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $data = $serializer->serialize($misc, 'json');
+        $restoredMisc = $serializer->deserialize($data, '', 'json');
 
-        $manager->clear();
-
-        $foo = $manager->find(Foo::class, $foo->getId());
-        $this->assertEquals($misc, $foo->getMisc());
+        $this->assertEquals($misc, $restoredMisc);
     }
 
     public function testNestedObjects()
@@ -112,18 +92,11 @@ class FunctionalTest extends KernelTestCase
 
         $misc = [$attributeParent];
 
-        $foo = new Foo();
-        $foo->setName('foo');
-        $foo->setMisc($misc);
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $data = $serializer->serialize($misc, 'json');
+        $restoredMisc = $serializer->deserialize($data, '', 'json');
 
-        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
-        $manager->persist($foo);
-        $manager->flush();
-
-        $manager->clear();
-
-        $foo = $manager->find(Foo::class, $foo->getId());
-        $this->assertEquals($misc, $foo->getMisc());
+        $this->assertEquals($misc, $restoredMisc);
     }
 
     public function testNestedObjectsInNestedObject()
@@ -139,37 +112,32 @@ class FunctionalTest extends KernelTestCase
 
         $misc = [$attributes];
 
-        $foo = new Foo();
-        $foo->setName('foo');
-        $foo->setMisc($misc);
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $data = $serializer->serialize($misc, 'json');
+        $restoredMisc = $serializer->deserialize($data, '', 'json');
 
-        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Foo::class);
-
-        $manager->persist($foo);
-        $manager->flush();
-        $manager->clear();
-
-        $foo = $manager->find(Foo::class, $foo->getId());
-
-        $this->assertEquals($misc, $foo->getMisc());
+        $this->assertEquals($misc, $restoredMisc);
     }
 
     public function testNullIsStoredAsNull()
     {
-        $product = new Product();
-        $product->name = 'My product';
-        $product->attributes = null;
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $data = $serializer->serialize(null, 'json');
+        $restoredMisc = $serializer->deserialize($data, '', 'json');
 
-        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
-        $manager->persist($product);
-        $manager->flush();
-        $manager->clear();
+        $this->assertEquals(null, $restoredMisc);
+    }
 
-        $connection = $manager->getConnection();
+    public function testScalarIsStoredInScalarKey()
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $value = new ScalarValue('foobar');
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#scalar', $decodeData);
+        $this->assertSame($value->value(), $decodeData['#scalar']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
 
-        $stmt = $connection->prepare('SELECT * FROM product');
-        $stmt->execute();
-
-        $this->assertNull($stmt->fetch()['attributes']);
+        $this->assertEquals($value, $restoredValue);
     }
 }

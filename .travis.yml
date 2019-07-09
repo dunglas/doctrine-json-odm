@@ -20,23 +20,25 @@ env:
     - MYSQL_DBNAME="travis_ci_test"
 
 php:
-    - 5.5
-    - 5.6
-    - 7.0
     - 7.1
     - 7.2
+    - 7.3
     - nightly
 
 matrix:
     fast_finish: true
     include:
         - php: 7.1
-          env: deps=low
+          env: deps=low SYMFONY_PHPUNIT_VERSION=5.7.27
         - php: 7.1
           env: deps=beta
         - php: 7.2
-          env: deps=low
+          env: deps=low SYMFONY_PHPUNIT_VERSION=5.7.27
         - php: 7.2
+          env: deps=beta
+        - php: 7.3
+          env: deps=low SYMFONY_PHPUNIT_VERSION=5.7.27
+        - php: 7.3
           env: deps=beta
     allow_failures:
         - env: deps=beta
