@@ -7,7 +7,7 @@ An Object-Document Mapper (ODM) for [Doctrine ORM](http://www.doctrine-project.o
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/20cf915b-1554-4f89-8772-ef0f913ec759/mini.png)](https://insight.sensiolabs.com/projects/20cf915b-1554-4f89-8772-ef0f913ec759)
 [![StyleCI](https://styleci.io/repos/57223826/shield)](https://styleci.io/repos/57223826)
 
-Did you ever dreamed of a tool creating powerful data models mixing traditional efficient relational mappings with modern
+Did you ever dream of a tool creating powerful data models mixing traditional, efficient relational mappings with modern
 schema-less and NoSQL-like ones?
 
 With Doctrine JSON ODM, it's now possible to create and query such hybrid data models with ease. Thanks to [modern JSON
@@ -15,8 +15,8 @@ types of RDBMS](http://www.postgresql.org/docs/current/static/datatype-json.html
 powerful and [fast as hell (similar in performance to a MongoDB database)](http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality)!
 You can even [define indexes](http://www.postgresql.org/docs/current/static/datatype-json.html#JSON-INDEXING) for those documents.
 
-Doctrine JSON ODM allows to store PHP objects as JSON documents in modern dynamic columns of RDBMS.
-It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and the JSON column of MySQL (>= 5.7.8).
+Doctrine JSON ODM allows to store PHP objects as JSON documents in modern, dynamic columns of an RDBMS.
+It works with JSON and JSONB columns of PostgreSQL (>= 9.4) and the JSON column type of MySQL (>= 5.7.8).
 
 For more information about concepts behind Doctrine JSON ODM, take a look at [the presentation given by Benjamin Eberlei at Symfony Catalunya 2016](https://qafoo.com/resources/presentations/symfony_catalunya_2016/doctrine_orm_and_nosql.html).
 
@@ -26,27 +26,27 @@ To install the library, use [Composer](https://getcomposer.org/), the PHP packag
 
     composer require dunglas/doctrine-json-odm
 
-If you are using [Symfony 4+](https://symfony.com) or [API Platform](https://api-platform.com), you have nothing more to do!
+If you are using [Symfony 4+](https://symfony.com) or [API Platform](https://api-platform.com), you don't need to do anything else!
 If you use Doctrine directly, use a bootstrap code similar to the following:
 
 ```php
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php'; // Adapt to your path
+require_once __DIR__.'/../vendor/autoload.php'; // Adjust to your path
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
-use Dunglas\DoctrineJsonOdm\Normalizer\ObjectNormalizer;
+use Dunglas\DoctrineJsonOdm\Serializer;
 use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer as BaseObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 if (!Type::hasType('json_document')) {
     Type::addType('json_document', JsonDocumentType::class);
     Type::getType('json_document')->setSerializer(
-        new Serializer([new ObjectNormalizer(new BaseObjectNormalizer())], [new JsonEncoder()])
+        new Serializer([new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
     );
 }
 
@@ -67,7 +67,9 @@ return EntityManager::create($conn, $config);
 
 ## Install with Symfony 2 and 3
 
-The library comes with a bundle for the [Symfony](https://symfony.com) framework. If you use Symfony 4+, it is automatically registered. For Symfony 2 and 3, you must register it yourself:
+The library comes with a bundle for the [Symfony](https://symfony.com) framework. If you use Symfony 4+ and Symfony
+Flex, it is automatically registered thanks to [its recipe](https://github.com/symfony/recipes-contrib/tree/master/dunglas/doctrine-json-odm).
+For Symfony 2 and 3, you must register it yourself:
 
 ```php
 // ...
