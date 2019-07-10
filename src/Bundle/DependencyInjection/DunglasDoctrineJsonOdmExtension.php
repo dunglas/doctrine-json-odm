@@ -11,11 +11,9 @@ namespace Dunglas\DoctrineJsonOdm\Bundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -47,19 +45,5 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-
-        $this->defineArraySerializerIfRequired($container);
-    }
-
-    /**
-     * BC layer for Symfony Framework Bundle <= 3.1.6.
-     *
-     * @param ContainerBuilder $container
-     */
-    private function defineArraySerializerIfRequired(ContainerBuilder $container): void
-    {
-        if (!$container->hasDefinition('serializer.denormalizer.array')) {
-            $container->setDefinition('serializer.denormalizer.array', new Definition(ArrayDenormalizer::class));
-        }
     }
 }

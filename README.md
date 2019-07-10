@@ -105,7 +105,7 @@ then, it is stored in a dynamic JSON column in the database.
 
 When the object will be hydrated, the JSON content of this column is transformed back to its original values, thanks again
 to the Symfony Serializer.
-All PHP objects and structures will be preserved (if you use Symfony >= 3.1, see the FAQ).
+All PHP objects and structures will be preserved.
 
 You can store any type of (serializable) PHP data structures in properties mapped using the `json_document` type.
 
