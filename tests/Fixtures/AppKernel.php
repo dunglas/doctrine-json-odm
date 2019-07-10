@@ -9,6 +9,7 @@
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\MakeServicesPublicPass;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\TestBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -40,15 +41,15 @@ class AppKernel extends Kernel
     {
     }
 
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
-        $c->loadFromExtension('framework', [
+        $container->loadFromExtension('framework', [
             'secret' => 'jsonodm',
             'test' => null,
         ]);
 
         $db = getenv('DB');
-        $c->loadFromExtension('doctrine', [
+        $container->loadFromExtension('doctrine', [
             'dbal' => [
                 'driver' => 'MYSQL' === $db ? 'pdo_mysql' : 'pdo_pgsql',
                 'host' => getenv("{$db}_HOST"),
@@ -62,5 +63,8 @@ class AppKernel extends Kernel
                 'auto_mapping' => true,
             ],
         ]);
+
+        // Make a few services public until we depend on Symfony 4.1+ and can use the new test container
+        $container->addCompilerPass(new MakeServicesPublicPass());
     }
 }

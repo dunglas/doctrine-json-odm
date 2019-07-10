@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\DoctrineJsonOdm\tests;
+namespace Dunglas\DoctrineJsonOdm\Tests;
 
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
@@ -15,27 +15,12 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class SerializerTest extends KernelTestCase
+class SerializerTest extends AbstractKernelTestCase
 {
-    /**
-     * @var Application
-     */
-    private $application;
-
-    protected function setUp()
-    {
-        $this->bootKernel();
-
-        $this->application = new Application(self::$kernel);
-        $this->application->setAutoExit(false);
-    }
-
     public function testStoreAndRetrieveDocument()
     {
         $attribute1 = new Attribute();

@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\DoctrineJsonOdm\tests;
+namespace Dunglas\DoctrineJsonOdm\Tests;
 
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
@@ -16,26 +16,16 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\StringInput;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class FunctionalTest extends KernelTestCase
+class FunctionalTest extends AbstractKernelTestCase
 {
-    /**
-     * @var Application
-     */
-    private $application;
-
     protected function setUp()
     {
-        $this->bootKernel();
-
-        $this->application = new Application(self::$kernel);
-        $this->application->setAutoExit(false);
+        parent::setUp();
 
         $this->runCommand('doctrine:schema:drop --force');
         $this->runCommand('doctrine:schema:create');
