@@ -1,4 +1,5 @@
 language: php
+dist: xenial
 
 cache:
   directories:
@@ -23,6 +24,7 @@ php:
     - 7.1
     - 7.2
     - 7.3
+    - 7.4-snapshot
     - nightly
 
 matrix:
@@ -43,6 +45,7 @@ matrix:
     allow_failures:
         - env: deps=beta
         - php: nightly
+        - php: 7.4-snapshot
 
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
