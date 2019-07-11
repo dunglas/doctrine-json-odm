@@ -249,9 +249,9 @@ As an example we use the Symfony `DateTimeNormalizer` service so we do have supp
 ```yaml
     # Add DateTime Normalizer to Dunglas' Doctrine JSON ODM Bundle
     dunglas_doctrine_json_odm.serializer:
-        class: Symfony\Component\Serializer\Serializer
+        class: Dunglas\DoctrineJsonOdm\Serializer
         arguments:
-          - ['@serializer.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.object']
+          - ['@serializer.denormalizer.array', '@serializer.normalizer.datetime', '@serializer.normalizer.object']
           - ['@serializer.encoder.json']
         public: true
 ```
