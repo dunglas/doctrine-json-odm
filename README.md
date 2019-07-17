@@ -217,7 +217,7 @@ Doctrine ORM 2.6+ and DBAL 2.6+ are supported.
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
-Then, you need to set an option of in the column mapping:
+Then, you need to set an option in the column mapping:
 
 ```php
 // ...
@@ -239,7 +239,6 @@ Yes.
 Yes! You can execute complex queries using [native queries](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/native-sql.html). 
 
 Alternatively, install [scienta/doctrine-json-functions](https://github.com/ScientaNL/DoctrineJsonFunctions) to be able to use run JSON functions in DQL and query builders.
-.
 
 **How can I add additional normalizers?**
 
@@ -258,15 +257,17 @@ As an example we use the Symfony `DateTimeNormalizer` service so we do have supp
 
 As a side note: If you happen to use [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html) in your `services.yaml` you might need to set `autowire: false` too.
 
-**When the namespace of an entity used changes**
+**When the namespace of a used entity changes**
 
 Because we store the `#type` along with the data in the database, you have to migrate the already existing data in your database to reflect the new namespace.
 
 Example: If we have a project that we migrate from `AppBundle` to `App`, we have the namespace `AppBundle/Entity/Bar` in our database which has to become `App/Entity/Bar` instead.
 
 When you use `MySQL`, you can use this query to migrate the data:
-```
-UPDATE Baz SET misc = JSON_REPLACE(misc, '$."#type"', 'App\\\Entity\\\Bar') WHERE 'AppBundle\\\Entity\\\Bar' = JSON_EXTRACT(misc, '$."#type"');
+```sql
+UPDATE Baz
+SET misc = JSON_REPLACE(misc, '$."#type"', 'App\\\Entity\\\Bar')
+WHERE 'AppBundle\\\Entity\\\Bar' = JSON_EXTRACT(misc, '$."#type"');
 ```
 
 ## Run tests
@@ -274,16 +275,17 @@ UPDATE Baz SET misc = JSON_REPLACE(misc, '$."#type"', 'App\\\Entity\\\Bar') WHER
 To execute the test suite, you need running PostgreSQL and MySQL servers.
 Run the following commands in your shell to set mandatory environment variables:
 
-    export POSTGRESQL_HOST=127.0.0.1
-    export POSTGRESQL_USER=dunglas
-    export POSTGRESQL_PASSWORD=
-    export POSTGRESQL_DBNAME=my_test_db
+```bash
+export POSTGRESQL_HOST=127.0.0.1
+export POSTGRESQL_USER=dunglas
+export POSTGRESQL_PASSWORD=
+export POSTGRESQL_DBNAME=my_test_db
 
-    export MYSQL_HOST=127.0.0.1
-    export MYSQL_USER=dunglas
-    export MYSQL_PASSWORD=
-    export MYSQL_DBNAME="my_test_db
-
+export MYSQL_HOST=127.0.0.1
+export MYSQL_USER=dunglas
+export MYSQL_PASSWORD=
+export MYSQL_DBNAME="my_test_db
+```
 Databases must exist. Be careful, its content may be deleted.
 
 Run the test suite, execute [PHPUnit](https://phpunit.de/):
