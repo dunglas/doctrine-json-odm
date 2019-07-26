@@ -166,7 +166,8 @@ class FunctionalTest extends AbstractKernelTestCase
     public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer()
     {
         /**
-         * This call is necessary to cover this issue
+         * This call is necessary to cover this issue.
+         *
          * @see https://github.com/dunglas/doctrine-json-odm/pull/78
          */
         $serializer = self::$kernel->getContainer()->get('serializer');
