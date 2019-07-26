@@ -17,7 +17,6 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -164,31 +163,35 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->assertNull($stmt->fetch()['attributes']);
     }
 
-	public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer()
-	{
-		$serializer = self::$kernel->getContainer()->get('serializer');
+    public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer()
+    {
+        /**
+         * This call is necessary to cover this issue
+         * @see https://github.com/dunglas/doctrine-json-odm/pull/78
+         */
+        $serializer = self::$kernel->getContainer()->get('serializer');
 
-		$attribute1 = new Attribute();
-		$attribute1->key = 'foo';
-		$attribute1->value = 'bar';
+        $attribute1 = new Attribute();
+        $attribute1->key = 'foo';
+        $attribute1->value = 'bar';
 
-		$attribute2 = new Attribute();
-		$attribute2->key = 'weights';
-		$attribute2->value = [34, 67];
+        $attribute2 = new Attribute();
+        $attribute2->key = 'weights';
+        $attribute2->value = [34, 67];
 
-		$attributes = [$attribute1, $attribute2];
+        $attributes = [$attribute1, $attribute2];
 
-		$product = new Product();
-		$product->name = 'My product';
-		$product->attributes = $attributes;
+        $product = new Product();
+        $product->name = 'My product';
+        $product->attributes = $attributes;
 
-		$manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
-		$manager->persist($product);
-		$manager->flush();
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+        $manager->persist($product);
+        $manager->flush();
 
-		$manager->clear();
+        $manager->clear();
 
-		$retrievedProduct = $manager->find(Product::class, $product->id);
-		$this->assertEquals($attributes, $retrievedProduct->attributes);
-	}
+        $retrievedProduct = $manager->find(Product::class, $product->id);
+        $this->assertEquals($attributes, $retrievedProduct->attributes);
+    }
 }
