@@ -251,7 +251,7 @@ As an example we use the Symfony `DateTimeNormalizer` service so we do have supp
     dunglas_doctrine_json_odm.serializer:
         class: Symfony\Component\Serializer\Serializer
         arguments:
-          - ['@serializer.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.object']
+          - ['@dunglas_doctrine_json_odm.normalizer.array', '@serializer.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.object']
           - ['@serializer.encoder.json']
         public: true
 ```
