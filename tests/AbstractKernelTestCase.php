@@ -19,7 +19,7 @@ abstract class AbstractKernelTestCase extends KernelTestCase
      */
     protected $application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bootKernel();
 
