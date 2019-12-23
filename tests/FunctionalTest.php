@@ -23,7 +23,7 @@ use Symfony\Component\Console\Input\StringInput;
  */
 class FunctionalTest extends AbstractKernelTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

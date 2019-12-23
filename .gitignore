@@ -1,6 +1,7 @@
 /vendor/
 /composer.lock
 /phpunit.xml
+/.phpunit.result.cache
 /tests/Fixtures/cache
 /tests/Fixtures/logs
 /var

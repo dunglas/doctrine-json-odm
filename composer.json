@@ -15,15 +15,15 @@
   "require": {
     "php": "^7.1",
     "doctrine/orm": "^2.6.3",
-    "symfony/property-access": "^3.4 || ^4.1",
-    "symfony/property-info": "^3.4 || ^4.1",
-    "symfony/serializer": "^3.4 || ^4.1"
+    "symfony/property-access": "^3.4 || ^4.1 || ^5.0",
+    "symfony/property-info": "^3.4 || ^4.1 || ^5.0",
+    "symfony/serializer": "^3.4 || ^4.1 || ^5.0"
   },
   "require-dev": {
     "doctrine/doctrine-bundle": "^1.8",
-    "symfony/finder": "^3.4 || ^4.1",
-    "symfony/framework-bundle": "^3.4 || ^4.1",
-    "symfony/phpunit-bridge": "^4.3"
+    "symfony/finder": "^3.4 || ^4.1 || ^5.0",
+    "symfony/framework-bundle": "^3.4 || ^4.1 || ^5.0",
+    "symfony/phpunit-bridge": "^5.0"
   },
   "suggest": {
     "symfony/framework-bundle": "To use the provided bundle.",
