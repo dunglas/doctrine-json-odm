@@ -9,7 +9,6 @@
 
 namespace Dunglas\DoctrineJsonOdm\Type;
 
-use Databrydge\Synchronizer\Domain\Connection\Package;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonArrayType;
 use Doctrine\DBAL\Types\JsonType;
@@ -69,22 +68,6 @@ final class JsonDocumentType extends InternalParentClass
     }
 
     /**
-     * Gets the serializer or throw an exception if it isn't available.
-     *
-     * @throws \RuntimeException
-     *
-     * @return SerializerInterface
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            throw new \RuntimeException(sprintf('An instance of "%s" must be available. Call the "setSerializer" method.', SerializerInterface::class));
-        }
-
-        return $this->serializer;
-    }
-
-    /**
      * Sets the serialization format (default to "json").
      *
      * @param string $format
@@ -124,6 +107,27 @@ final class JsonDocumentType extends InternalParentClass
         }
 
         return $this->getSerializer()->serialize($value, $this->format, $this->serializationContext);
+    }
+
+    /**
+     * Gets the serializer or throw an exception if it isn't available.
+     *
+     * @return SerializerInterface
+     * @throws \RuntimeException
+     *
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            throw new \RuntimeException(
+                sprintf(
+                    'An instance of "%s" must be available. Call the "setSerializer" method.',
+                    SerializerInterface::class
+                )
+            );
+        }
+
+        return $this->serializer;
     }
 
     /**
