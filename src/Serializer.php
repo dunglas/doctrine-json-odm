@@ -36,17 +36,30 @@ final class Serializer extends BaseSerializer
             unset($data[self::KEY_TYPE]);
 
             $data = $data[self::KEY_SCALAR] ?? $data;
-            $data = $this->denormalize($data, $type, $format, $context);
 
             return parent::denormalize($data, $type, $format, $context);
         }
 
         if (is_iterable($data)) {
             $class = ($class === '') ? 'stdClass' : $class;
+            $arrayOfDocuments = true;
+            foreach ($data as $row) {
+                if (!is_array($row)) {
+                    $arrayOfDocuments = false;
+                    break;
+                }
 
-            return parent::denormalize($data, $class.'[]', $format, $context);
+                if (!isset($row[self::KEY_TYPE])) {
+                    $arrayOfDocuments = false;
+                    break;
+                }
+            }
+
+            if ($arrayOfDocuments) {
+                return parent::denormalize($data, $class.'[]', $format, $context);
+            }
         }
 
-        return $data;
+        return parent::denormalize($data, $class, $format, $context);
     }
 }
