@@ -9,12 +9,22 @@
 
 namespace Dunglas\DoctrineJsonOdm;
 
+use Databrydge\Synchronizer\Domain\Connection\PackageType;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Serializer as BaseSerializer;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class Serializer extends BaseSerializer
 {
     private const KEY_TYPE = '#type';
     private const KEY_SCALAR = '#scalar';
+
 
     public function normalize($data, $format = null, array $context = [])
     {
@@ -36,17 +46,30 @@ final class Serializer extends BaseSerializer
             unset($data[self::KEY_TYPE]);
 
             $data = $data[self::KEY_SCALAR] ?? $data;
-            $data = $this->denormalize($data, $type, $format, $context);
 
             return parent::denormalize($data, $type, $format, $context);
         }
 
         if (is_iterable($data)) {
             $class = ($class === '') ? 'stdClass' : $class;
+            $arrayOfDocuments = true;
+            foreach ($data as $row) {
+                if (!is_array($row)) {
+                    $arrayOfDocuments = false;
+                    break;
+                }
 
-            return parent::denormalize($data, $class.'[]', $format, $context);
+                if (!isset($row[self::KEY_TYPE])) {
+                    $arrayOfDocuments = false;
+                    break;
+                }
+            }
+
+            if ($arrayOfDocuments) {
+                return parent::denormalize($data, $class.'[]', $format, $context);
+            }
         }
 
-        return $data;
+        return parent::denormalize($data, $class, $format, $context);
     }
 }
