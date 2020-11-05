@@ -255,7 +255,7 @@ As an example we use the Symfony `DateTimeNormalizer` service so we do have supp
         public: true
 ```
 
-As a side note: If you happen to use [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html) in your `services.yaml` you might need to set `autowire: false` too.
+As a side note: If you happen to use [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html) in your `services.yaml` you might need to set `autowire: false` too. Same goes for `autoconfigure: false` in case you're using [Autoconfiguration](https://symfony.com/doc/current/service_container.html#the-autoconfigure-option).
 
 **When the namespace of a used entity changes**
 
