@@ -13,14 +13,14 @@
     }
   ],
   "require": {
-    "php": "^7.1",
+    "php": ">=7.1",
     "doctrine/orm": "^2.6.3",
     "symfony/property-access": "^3.4 || ^4.1 || ^5.0",
     "symfony/property-info": "^3.4 || ^4.1 || ^5.0",
     "symfony/serializer": "^3.4 || ^4.1 || ^5.0"
   },
   "require-dev": {
-    "doctrine/doctrine-bundle": "^1.8",
+    "doctrine/doctrine-bundle": "^1.8 || ^2.2",
     "symfony/finder": "^3.4 || ^4.1 || ^5.0",
     "symfony/framework-bundle": "^3.4 || ^4.1 || ^5.0",
     "symfony/phpunit-bridge": "^5.0"

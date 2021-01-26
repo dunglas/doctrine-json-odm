@@ -25,6 +25,7 @@ php:
     - 7.2
     - 7.3
     - 7.4
+    - 8.0
     - nightly
 
 matrix:
@@ -45,6 +46,10 @@ matrix:
         - php: 7.4
           env: deps=low SYMFONY_PHPUNIT_VERSION=5.7.27
         - php: 7.4
+          env: deps=beta
+        - php: 8.0
+          env: deps=low SYMFONY_PHPUNIT_VERSION=5.7.27
+        - php: 8.0
           env: deps=beta
     allow_failures:
         - env: deps=beta
