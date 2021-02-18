@@ -20,8 +20,8 @@ final class Serializer extends BaseSerializer
     {
         $normalizedData = parent::normalize($data, $format, $context);
 
-        if (is_object($data)) {
-            $typeData = [self::KEY_TYPE => get_class($data)];
+        if (\is_object($data)) {
+            $typeData = [self::KEY_TYPE => \get_class($data)];
             $valueData = is_scalar($normalizedData) ? [self::KEY_SCALAR => $normalizedData] : $normalizedData;
             $normalizedData = array_merge($typeData, $valueData);
         }
@@ -31,7 +31,7 @@ final class Serializer extends BaseSerializer
 
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        if (is_array($data) && (isset($data[self::KEY_TYPE]))) {
+        if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
             $type = $data[self::KEY_TYPE];
             unset($data[self::KEY_TYPE]);
 
