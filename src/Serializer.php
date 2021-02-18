@@ -42,7 +42,7 @@ final class Serializer extends BaseSerializer
         }
 
         if (is_iterable($data)) {
-            $class = ($class === '') ? 'stdClass' : $class;
+            $class = ('' === $class) ? 'stdClass' : $class;
 
             return parent::denormalize($data, $class.'[]', $format, $context);
         }
