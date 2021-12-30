@@ -1,5 +1,5 @@
 {
-  "name": "dunglas/doctrine-json-odm",
+  "name": "joseenriquevasquez/doctrine-json-odm",
   "type": "library",
   "description": "An object document mapper for Doctrine ORM using JSON types of modern RDBMS.",
   "keywords": ["ORM", "ODM", "JSON", "database", "RDBMS", "PostgreSQL", "MySQL"],
