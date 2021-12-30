@@ -16,7 +16,7 @@ final class Serializer extends BaseSerializer
     private const KEY_TYPE = '#type';
     private const KEY_SCALAR = '#scalar';
 
-    public function normalize($data, $format = null, array $context = []):array
+    public function normalize($data, $format = null, array $context = []):array|int
     {
         $normalizedData = parent::normalize($data, $format, $context);
 
@@ -29,7 +29,7 @@ final class Serializer extends BaseSerializer
         return $normalizedData;
     }
 
-    public function denormalize($data, $class, $format = null, array $context = []):array
+    public function denormalize($data, $class, $format = null, array $context = []):array|int
     {
         if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
             $type = $data[self::KEY_TYPE];
