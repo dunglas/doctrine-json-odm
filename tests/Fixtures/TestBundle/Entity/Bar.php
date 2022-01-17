@@ -14,37 +14,25 @@ namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
  */
 class Bar
 {
-    private $title;
-    private $weight;
+    private mixed $title;
+    private mixed $weight;
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
+    public function getTitle(): mixed
     {
         return $this->title;
     }
 
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
+    public function setTitle(mixed $title)
     {
         $this->title = $title;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getWeight()
+    public function getWeight(): mixed
     {
         return $this->weight;
     }
 
-    /**
-     * @param mixed $weight
-     */
-    public function setWeight($weight)
+    public function setWeight(mixed $weight)
     {
         $this->weight = $weight;
     }

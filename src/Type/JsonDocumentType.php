@@ -37,32 +37,18 @@ if (class_exists(JsonType::class)) {
  */
 final class JsonDocumentType extends InternalParentClass
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
-    /**
-     * @var string
-     */
-    private $format = 'json';
+    private string $format = 'json';
 
-    /**
-     * @var array
-     */
-    private $serializationContext = [];
+    private array $serializationContext = [];
 
-    /**
-     * @var array
-     */
-    private $deserializationContext = [];
+    private array $deserializationContext = [];
 
     /**
      * Sets the serializer to use.
-     *
-     * @param SerializerInterface $serializer
      */
-    public function setSerializer(SerializerInterface $serializer)
+    public function setSerializer(SerializerInterface $serializer): void
     {
         $this->serializer = $serializer;
     }
@@ -71,10 +57,8 @@ final class JsonDocumentType extends InternalParentClass
      * Gets the serializer or throw an exception if it isn't available.
      *
      * @throws \RuntimeException
-     *
-     * @return SerializerInterface
      */
-    private function getSerializer()
+    private function getSerializer(): SerializerInterface
     {
         if (null === $this->serializer) {
             throw new \RuntimeException(sprintf('An instance of "%s" must be available. Call the "setSerializer" method.', SerializerInterface::class));
@@ -85,30 +69,24 @@ final class JsonDocumentType extends InternalParentClass
 
     /**
      * Sets the serialization format (default to "json").
-     *
-     * @param string $format
      */
-    public function setFormat($format)
+    public function setFormat(string $format): void
     {
         $this->format = $format;
     }
 
     /**
      * Sets the serialization context (default to an empty array).
-     *
-     * @param array $serializationContext
      */
-    public function setSerializationContext(array $serializationContext)
+    public function setSerializationContext(array $serializationContext): void
     {
         $this->serializationContext = $serializationContext;
     }
 
     /**
      * Sets the deserialization context (default to an empty array).
-     *
-     * @param array $deserializationContext
      */
-    public function setDeserializationContext(array $deserializationContext)
+    public function setDeserializationContext(array $deserializationContext): void
     {
         $this->deserializationContext = $deserializationContext;
     }
@@ -116,10 +94,10 @@ final class JsonDocumentType extends InternalParentClass
     /**
      * {@inheritdoc}
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
-            return;
+            return null;
         }
 
         return $this->getSerializer()->serialize($value, $this->format, $this->serializationContext);
@@ -128,10 +106,10 @@ final class JsonDocumentType extends InternalParentClass
     /**
      * {@inheritdoc}
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if (null === $value || $value === '') {
-            return;
+            return null;
         }
 
         return $this->getSerializer()->deserialize($value, '', $this->format, $this->deserializationContext);
@@ -140,7 +118,7 @@ final class JsonDocumentType extends InternalParentClass
     /**
      * {@inheritdoc}
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
@@ -148,7 +126,7 @@ final class JsonDocumentType extends InternalParentClass
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'json_document';
     }

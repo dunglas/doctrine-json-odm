@@ -33,7 +33,7 @@ class ScalarValue implements NormalizableInterface, DenormalizableInterface
         return $this->value;
     }
 
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = []): array|string|int|float|bool
     {
         return $this->value;
     }
