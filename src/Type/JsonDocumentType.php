@@ -61,6 +61,8 @@ final class JsonDocumentType extends InternalParentClass
      * Sets the serializer to use.
      *
      * @param SerializerInterface $serializer
+     *
+     * @return void
      */
     public function setSerializer(SerializerInterface $serializer)
     {
@@ -87,6 +89,8 @@ final class JsonDocumentType extends InternalParentClass
      * Sets the serialization format (default to "json").
      *
      * @param string $format
+     *
+     * @return void
      */
     public function setFormat($format)
     {
@@ -97,6 +101,8 @@ final class JsonDocumentType extends InternalParentClass
      * Sets the serialization context (default to an empty array).
      *
      * @param array $serializationContext
+     *
+     * @return void
      */
     public function setSerializationContext(array $serializationContext)
     {
@@ -107,6 +113,8 @@ final class JsonDocumentType extends InternalParentClass
      * Sets the deserialization context (default to an empty array).
      *
      * @param array $deserializationContext
+     *
+     * @return void
      */
     public function setDeserializationContext(array $deserializationContext)
     {
@@ -114,7 +122,9 @@ final class JsonDocumentType extends InternalParentClass
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $value
+     *
+     * @return bool
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -126,7 +136,7 @@ final class JsonDocumentType extends InternalParentClass
     }
 
     /**
-     * {@inheritdoc}
+     * @return mixed
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -138,7 +148,7 @@ final class JsonDocumentType extends InternalParentClass
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
@@ -146,7 +156,7 @@ final class JsonDocumentType extends InternalParentClass
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName()
     {
