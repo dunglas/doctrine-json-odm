@@ -30,7 +30,7 @@ final class DunglasDoctrineJsonOdmBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function boot()
+    public function boot(): void
     {
         $type = Type::getType('json_document');
         $type->setSerializer($this->container->get('dunglas_doctrine_json_odm.serializer'));

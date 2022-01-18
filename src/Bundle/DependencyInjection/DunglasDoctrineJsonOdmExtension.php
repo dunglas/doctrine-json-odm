@@ -23,7 +23,7 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
     /**
      * {@inheritdoc}
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         if (empty($frameworkConfiguration = $container->getExtensionConfig('framework'))) {
             return;
@@ -41,7 +41,7 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
