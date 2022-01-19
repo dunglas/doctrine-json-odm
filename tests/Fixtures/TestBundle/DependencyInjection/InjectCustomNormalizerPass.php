@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Normalizer\CustomNormalizer;
 
 class InjectCustomNormalizerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $container->setDefinition('dunglas_doctrine_json_odm.normalizer.custom', new Definition(CustomNormalizer::class));
 

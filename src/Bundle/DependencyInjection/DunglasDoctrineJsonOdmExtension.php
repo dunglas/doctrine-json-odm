@@ -23,17 +23,17 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
     /**
      * {@inheritdoc}
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         if (empty($frameworkConfiguration = $container->getExtensionConfig('framework'))) {
             return;
         }
 
-        if (!isset($frameworkConfiguration['serializer']) || !isset($frameworkConfiguration['serializer']['enabled'])) {
+        if (!isset($frameworkConfiguration['serializer']['enabled'])) {
             $container->prependExtensionConfig('framework', ['serializer' => ['enabled' => true]]);
         }
 
-        if (!isset($frameworkConfiguration['property_info']) || !isset($frameworkConfiguration['property_info']['enabled'])) {
+        if (!isset($frameworkConfiguration['property_info']['enabled'])) {
             $container->prependExtensionConfig('framework', ['property_info' => ['enabled' => true]]);
         }
     }
@@ -41,7 +41,7 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

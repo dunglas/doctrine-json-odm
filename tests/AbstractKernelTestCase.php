@@ -21,7 +21,7 @@ abstract class AbstractKernelTestCase extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel();
+        self::bootKernel();
 
         $this->application = new Application(self::$kernel);
         $this->application->setAutoExit(false);

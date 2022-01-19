@@ -21,7 +21,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
  */
 class SerializerTest extends AbstractKernelTestCase
 {
-    public function testStoreAndRetrieveDocument()
+    public function testStoreAndRetrieveDocument(): void
     {
         $attribute1 = new Attribute();
         $attribute1->key = 'foo';
@@ -40,7 +40,7 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals($attributes, $restoredAttributes);
     }
 
-    public function testStoreAndRetrieveDocumentsOfVariousTypes()
+    public function testStoreAndRetrieveDocumentsOfVariousTypes(): void
     {
         $bar = new Bar();
         $bar->setTitle('Bar');
@@ -65,7 +65,7 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals($misc, $restoredMisc);
     }
 
-    public function testNestedObjects()
+    public function testNestedObjects(): void
     {
         $attribute = new Attribute();
         $attribute->key = 'nested';
@@ -84,7 +84,7 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals($misc, $restoredMisc);
     }
 
-    public function testNestedObjectsInNestedObject()
+    public function testNestedObjectsInNestedObject(): void
     {
         $attribute1 = new Attribute();
         $attribute1->key = 'attribute1';
@@ -104,7 +104,7 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals($misc, $restoredMisc);
     }
 
-    public function testNullIsStoredAsNull()
+    public function testNullIsStoredAsNull(): void
     {
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $data = $serializer->serialize(null, 'json');
@@ -113,7 +113,7 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals(null, $restoredMisc);
     }
 
-    public function testScalarIsStoredInScalarKey()
+    public function testScalarIsStoredInScalarKey(): void
     {
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $value = new ScalarValue('foobar');

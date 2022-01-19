@@ -13,17 +13,17 @@ class Attributes
 {
     private $attributes = [];
 
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
     }
 
-    public function addAttributes(Attribute $attribute)
+    public function addAttributes(Attribute $attribute): void
     {
         $this->attributes[] = $attribute;
     }
