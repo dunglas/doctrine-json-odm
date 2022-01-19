@@ -25,7 +25,7 @@ To install the library, use [Composer](https://getcomposer.org/), the PHP packag
 
     composer require dunglas/doctrine-json-odm
 
-If you are using [Symfony 4+](https://symfony.com) or [API Platform](https://api-platform.com), you don't need to do anything else!
+If you are using [Symfony](https://symfony.com) or [API Platform](https://api-platform.com), you don't need to do anything else!
 If you use Doctrine directly, use a bootstrap code similar to the following:
 
 ```php
@@ -64,37 +64,6 @@ $conn = [
 return EntityManager::create($conn, $config);
 ```
 
-## Install with Symfony 2 and 3
-
-The library comes with a bundle for the [Symfony](https://symfony.com) framework. If you use Symfony 4+ and Symfony
-Flex, it is automatically registered thanks to [its recipe](https://github.com/symfony/recipes-contrib/tree/master/dunglas/doctrine-json-odm).
-For Symfony 2 and 3, you must register it yourself:
-
-```php
-// ...
-
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Component\HttpKernel\Kernel;
-
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        return [
-            new FrameworkBundle(),
-            new DoctrineBundle(),
-            new DunglasDoctrineJsonOdmBundle(),
-
-            // ...
-        ];
-    }
-
-    // ...
-}
-```
-
 ## Usage
 
 Doctrine JSON ODM provides a `json_document` column type for properties of Doctrine entities.
@@ -111,34 +80,24 @@ You can store any type of (serializable) PHP data structures in properties mappe
 Example:
 
 ```php
-namespace AppBundle\Entity;
+namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\{Entity, Column, Id, GeneratedValue};
 
-/**
- * This is a typical Doctrine ORM entity.
- *
- * @ORM\Entity
- */
+// This is a typical Doctrine ORM entity.
+#[Entity]
 class Foo
 {
-  /**
-   * @ORM\Column(type="integer")
-   * @ORM\Id
-   * @ORM\GeneratedValue(strategy="AUTO")
-   */
-  public $id;
+  #[Column]
+  #[Id]
+  #[GeneratedValue]
+  public int $id;
 
-  /**
-   * @ORM\Column(type="string")
-   */
-  public $name;
+  #[Column]
+  public string $name;
 
-  /**
-   * Can contain anything (array, objects, nested objects...).
-   *
-   * @ORM\Column(type="json_document", options={"jsonb": true})
-   */
+  // Can contain anything: array, objects, nested objects...
+  #[Column(type: 'json_document', options: ['jsonb' => true])]
   public $misc;
 
   // Works with private and protected methods with getters and setters too.
@@ -146,39 +105,35 @@ class Foo
 ```
 
 ```php
-namespace AppBundle\Entity;
+namespace App\Entity;
 
-/**
- * This is NOT an entity! It's a POPO (Plain Old PHP Object). It can contain anything.
- */
+// This is NOT an entity! It's a POPO (Plain Old PHP Object). It can contain anything.
 class Bar
 {
-    public $title;
-    public $weight;
+    public string $title;
+    public float $weight;
 }
 ```
 
 ```php
-namespace AppBundle\Entity;
+namespace App\Entity;
 
-/**
- * This is NOT an entity. It's another POPO and it can contain anything.
- */
+// This is NOT an entity. It's another POPO and it can contain anything.
 class Baz
 {
-    public $name;
-    public $size;
+    public string $name;
+    public int $size;
 }
 ```
 
 Store a graph of random object in the JSON type of the database:
 
 ```php
-// $entityManager = $this->get('doctrine')->getManagerForClass(AppBundle\Entity\Foo::class);
+// $entityManager = $managerRegistry->getManagerForClass(Foo::class);
 
 $bar = new Bar();
 $bar->title = 'Bar';
-$bar->weight = 12;
+$bar->weight = 12.3;
 
 $baz = new Baz();
 $baz->name = 'Baz';
@@ -199,10 +154,12 @@ $foo = $entityManager->find(Foo::class, $foo->getId());
 var_dump($foo->misc); // Same as what we set earlier
 ```
 
-
 ### Limitations when updating nested properties
 
-Due to how Doctrine works, it will not detect changes to nested objects or properties. The reason for this is that Doctrine compares objects by reference to optimize `UPDATE` queries. If you experience problems where no `UPDATE` queries are executed, you might need to `clone` the object before you set it. That way Doctrine will notice the change. See https://github.com/dunglas/doctrine-json-odm/issues/21 for more information.
+Due to how Doctrine works, it will not detect changes to nested objects or properties.
+The reason for this is that Doctrine compares objects by reference to optimize `UPDATE` queries.
+If you experience problems where no `UPDATE` queries are executed, you might need to `clone` the object before you set it.
+That way Doctrine will notice the change. See https://github.com/dunglas/doctrine-json-odm/issues/21 for more information.
 
 ## FAQ
 
@@ -221,9 +178,7 @@ Then, you need to set an option in the column mapping:
 ```php
 // ...
 
-    /**
-     * @ORM\Column(type="json_document", options={"jsonb": true})
-     */
+    #[Column(type: 'json_document', options: ['jsonb' => true])]
     public $foo;
 
 // ...
@@ -242,7 +197,7 @@ Alternatively, install [scienta/doctrine-json-functions](https://github.com/Scie
 **How can I add additional normalizers?**
 
 The Symfony Serializer is easily extensible. This bundle registers and uses a service with ID `dunglas_doctrine_json_odm.serializer` as the serializer for the JSON type. This means we can easily override it in our `services.yaml` to use additional normalizers.
-As an example we use the Symfony `DateTimeNormalizer` service so we do have support for any property that is an instance of `\DateTimeInterface`. Be aware that the order of the normalizers might be relevant depending on the normalizers you use.
+As an example we use the Symfony `DateTimeNormalizer` service, so we do have support for any property that is an instance of `\DateTimeInterface`. Be aware that the order of the normalizers might be relevant depending on the normalizers you use.
 
 ```yaml
     # Add DateTime Normalizer to Dunglas' Doctrine JSON ODM Bundle
@@ -271,5 +226,9 @@ WHERE 'AppBundle\\\Entity\\\Bar' = JSON_EXTRACT(misc, '$."#type"');
 
 ## Credits
 
-This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr), [Yanick Witschi](https://github.com/Toflar) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
+This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
 Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+
+## Former Maintainers
+
+[Yanick Witschi](https://github.com/Toflar) helped maintain this bundle, thanks!
