@@ -14,7 +14,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>

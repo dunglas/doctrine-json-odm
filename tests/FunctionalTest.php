@@ -15,7 +15,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 use Symfony\Component\Console\Input\StringInput;
 
 /**

@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
+namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document;
 
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;

@@ -7,11 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
-
-if (PHP_MAJOR_VERSION < 8) {
-    return;
-}
+namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
