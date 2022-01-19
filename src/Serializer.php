@@ -9,44 +9,25 @@
 
 namespace Dunglas\DoctrineJsonOdm;
 
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Serializer as BaseSerializer;
 
-final class Serializer extends BaseSerializer
-{
-    private const KEY_TYPE = '#type';
-    private const KEY_SCALAR = '#scalar';
-
-    public function normalize($data, $format = null, array $context = [])
+if (method_exists(ArrayDenormalizer::class, 'setSerializer')) {
+    // Symfony <=5.4
+    final class Serializer extends BaseSerializer
     {
-        $normalizedData = parent::normalize($data, $format, $context);
+        private const KEY_TYPE = '#type';
+        private const KEY_SCALAR = '#scalar';
 
-        if (\is_object($data)) {
-            $typeData = [self::KEY_TYPE => \get_class($data)];
-            $valueData = is_scalar($normalizedData) ? [self::KEY_SCALAR => $normalizedData] : $normalizedData;
-            $normalizedData = array_merge($typeData, $valueData);
-        }
-
-        return $normalizedData;
+        use SerializerTrait;
     }
-
-    public function denormalize($data, $type, $format = null, array $context = [])
+} else {
+    // Symfony >=6.0
+    final class Serializer extends BaseSerializer
     {
-        if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
-            $keyType = $data[self::KEY_TYPE];
-            unset($data[self::KEY_TYPE]);
+        private const KEY_TYPE = '#type';
+        private const KEY_SCALAR = '#scalar';
 
-            $data = $data[self::KEY_SCALAR] ?? $data;
-            $data = $this->denormalize($data, $keyType, $format, $context);
-
-            return parent::denormalize($data, $keyType, $format, $context);
-        }
-
-        if (is_iterable($data)) {
-            $type = ('' === $type) ? 'stdClass' : $type;
-
-            return parent::denormalize($data, $type.'[]', $format, $context);
-        }
-
-        return $data;
+        use TypedSerializerTrait;
     }
 }

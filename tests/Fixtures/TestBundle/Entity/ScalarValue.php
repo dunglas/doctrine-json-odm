@@ -9,39 +9,28 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
 
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * Fixture class to test object normalized as scalar values.
  *
  * @author Antonio J. García Lagar <aj@garcialagar.es>
  */
-class ScalarValue implements NormalizableInterface, DenormalizableInterface
-{
-    private $value;
-
-    public function __construct($value = '')
+if (method_exists(ArrayDenormalizer::class, 'setSerializer')) {
+    // Symfony <=5.4
+    class ScalarValue implements NormalizableInterface, DenormalizableInterface
     {
-        $this->value = $value;
+        use ScalarValueTrait;
     }
-
-    public function value()
+} else {
+    // Symfony >=6.0
+    class ScalarValue implements NormalizableInterface, DenormalizableInterface
     {
-        return $this->value;
-    }
-
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = [])
-    {
-        return $this->value;
-    }
-
-    public function denormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
-    {
-        $this->value = $data;
-
-        return $this;
+        use ScalarValueTrait, TypedScalarValueTrait {
+            TypedScalarValueTrait::normalize insteadof ScalarValueTrait;
+            TypedScalarValueTrait::denormalize insteadof ScalarValueTrait;
+        }
     }
 }
