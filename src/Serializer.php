@@ -29,22 +29,22 @@ final class Serializer extends BaseSerializer
         return $normalizedData;
     }
 
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, $type, $format = null, array $context = [])
     {
         if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
-            $type = $data[self::KEY_TYPE];
+            $keyType = $data[self::KEY_TYPE];
             unset($data[self::KEY_TYPE]);
 
             $data = $data[self::KEY_SCALAR] ?? $data;
-            $data = $this->denormalize($data, $type, $format, $context);
+            $data = $this->denormalize($data, $keyType, $format, $context);
 
-            return parent::denormalize($data, $type, $format, $context);
+            return parent::denormalize($data, $keyType, $format, $context);
         }
 
         if (is_iterable($data)) {
-            $class = ('' === $class) ? 'stdClass' : $class;
+            $type = ('' === $type) ? 'stdClass' : $type;
 
-            return parent::denormalize($data, $class.'[]', $format, $context);
+            return parent::denormalize($data, $type.'[]', $format, $context);
         }
 
         return $data;

@@ -28,7 +28,7 @@ class Bar
     /**
      * @param mixed $title
      */
-    public function setTitle($title)
+    public function setTitle($title): void
     {
         $this->title = $title;
     }
@@ -44,7 +44,7 @@ class Bar
     /**
      * @param mixed $weight
      */
-    public function setWeight($weight)
+    public function setWeight($weight): void
     {
         $this->weight = $weight;
     }

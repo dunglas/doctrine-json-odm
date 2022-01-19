@@ -45,7 +45,7 @@ class Foo
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -55,7 +55,7 @@ class Foo
         return $this->misc;
     }
 
-    public function setMisc(array $misc)
+    public function setMisc(array $misc): void
     {
         $this->misc = $misc;
     }

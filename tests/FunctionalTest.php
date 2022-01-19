@@ -31,12 +31,12 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->runCommand('doctrine:schema:create');
     }
 
-    private function runCommand($command)
+    private function runCommand($command): void
     {
-        return $this->application->run(new StringInput($command.' --no-interaction --quiet'));
+        $this->application->run(new StringInput($command.' --no-interaction --quiet'));
     }
 
-    public function testStoreAndRetrieveDocument()
+    public function testStoreAndRetrieveDocument(): void
     {
         $attribute1 = new Attribute();
         $attribute1->key = 'foo';
@@ -62,7 +62,7 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->assertEquals($attributes, $retrievedProduct->attributes);
     }
 
-    public function testStoreAndRetrieveDocumentsOfVariousTypes()
+    public function testStoreAndRetrieveDocumentsOfVariousTypes(): void
     {
         $bar = new Bar();
         $bar->setTitle('Bar');
@@ -90,7 +90,7 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->assertEquals($misc, $foo->getMisc());
     }
 
-    public function testNestedObjects()
+    public function testNestedObjects(): void
     {
         $attribute = new Attribute();
         $attribute->key = 'nested';
@@ -116,7 +116,7 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->assertEquals($misc, $foo->getMisc());
     }
 
-    public function testNestedObjectsInNestedObject()
+    public function testNestedObjectsInNestedObject(): void
     {
         $attribute1 = new Attribute();
         $attribute1->key = 'attribute1';
@@ -144,7 +144,7 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->assertEquals($misc, $foo->getMisc());
     }
 
-    public function testNullIsStoredAsNull()
+    public function testNullIsStoredAsNull(): void
     {
         $product = new Product();
         $product->name = 'My product';
@@ -160,7 +160,7 @@ class FunctionalTest extends AbstractKernelTestCase
         $this->assertNull($statement->fetchAssociative()['attributes']);
     }
 
-    public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer()
+    public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer(): void
     {
         /**
          * This call is necessary to cover this issue.

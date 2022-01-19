@@ -10,32 +10,15 @@
 namespace Dunglas\DoctrineJsonOdm\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\JsonArrayType;
 use Doctrine\DBAL\Types\JsonType;
 use Symfony\Component\Serializer\SerializerInterface;
-
-if (class_exists(JsonType::class)) {
-    /**
-     * @internal
-     */
-    class InternalParentClass extends JsonType
-    {
-    }
-} else {
-    /**
-     * @internal
-     */
-    class InternalParentClass extends JsonArrayType
-    {
-    }
-}
 
 /**
  * The JSON document type.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-final class JsonDocumentType extends InternalParentClass
+final class JsonDocumentType extends JsonType
 {
     /**
      * @var SerializerInterface
@@ -59,12 +42,8 @@ final class JsonDocumentType extends InternalParentClass
 
     /**
      * Sets the serializer to use.
-     *
-     * @param SerializerInterface $serializer
-     *
-     * @return void
      */
-    public function setSerializer(SerializerInterface $serializer)
+    public function setSerializer(SerializerInterface $serializer): void
     {
         $this->serializer = $serializer;
     }
@@ -73,10 +52,8 @@ final class JsonDocumentType extends InternalParentClass
      * Gets the serializer or throw an exception if it isn't available.
      *
      * @throws \RuntimeException
-     *
-     * @return SerializerInterface
      */
-    private function getSerializer()
+    private function getSerializer(): SerializerInterface
     {
         if (null === $this->serializer) {
             throw new \RuntimeException(sprintf('An instance of "%s" must be available. Call the "setSerializer" method.', SerializerInterface::class));
@@ -87,78 +64,60 @@ final class JsonDocumentType extends InternalParentClass
 
     /**
      * Sets the serialization format (default to "json").
-     *
-     * @param string $format
-     *
-     * @return void
      */
-    public function setFormat($format)
+    public function setFormat(string $format): void
     {
         $this->format = $format;
     }
 
     /**
      * Sets the serialization context (default to an empty array).
-     *
-     * @param array $serializationContext
-     *
-     * @return void
      */
-    public function setSerializationContext(array $serializationContext)
+    public function setSerializationContext(array $serializationContext): void
     {
         $this->serializationContext = $serializationContext;
     }
 
     /**
      * Sets the deserialization context (default to an empty array).
-     *
-     * @param array $deserializationContext
-     *
-     * @return void
      */
-    public function setDeserializationContext(array $deserializationContext)
+    public function setDeserializationContext(array $deserializationContext): void
     {
         $this->deserializationContext = $deserializationContext;
     }
 
     /**
      * @param mixed $value
-     *
-     * @return bool
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (null === $value) {
-            return;
+            return null;
         }
 
         return $this->getSerializer()->serialize($value, $this->format, $this->serializationContext);
     }
 
     /**
+     * @param mixed $value
+     *
      * @return mixed
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if (null === $value || $value === '') {
-            return;
+            return null;
         }
 
         return $this->getSerializer()->deserialize($value, '', $this->format, $this->deserializationContext);
     }
 
-    /**
-     * @return bool
-     */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'json_document';
     }

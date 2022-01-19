@@ -22,7 +22,7 @@ class Baz
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -32,7 +32,7 @@ class Baz
         return $this->size;
     }
 
-    public function setSize($size)
+    public function setSize($size): void
     {
         $this->size = $size;
     }
