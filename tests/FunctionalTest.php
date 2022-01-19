@@ -156,11 +156,8 @@ class FunctionalTest extends AbstractKernelTestCase
         $manager->clear();
 
         $connection = $manager->getConnection();
-
-        $stmt = $connection->prepare('SELECT * FROM product');
-        $stmt->execute();
-
-        $this->assertNull($stmt->fetch()['attributes']);
+        $statement = $connection->executeQuery('SELECT * FROM Product');
+        $this->assertNull($statement->fetchAssociative()['attributes']);
     }
 
     public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer()

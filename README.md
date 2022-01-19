@@ -2,9 +2,8 @@
 
 An Object-Document Mapper (ODM) for [Doctrine ORM](http://www.doctrine-project.org/projects/orm.html) leveraging new JSON types of modern RDBMS.
 
-[![Build Status](https://travis-ci.org/dunglas/doctrine-json-odm.svg?branch=master)](https://travis-ci.org/dunglas/doctrine-json-odm)
+[![tests](https://github.com/dunglas/doctrine-json-odm/actions/workflows/tests.yml/badge.svg)](https://github.com/dunglas/doctrine-json-odm/actions/workflows/tests.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/doctrine-json-odm/?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/20cf915b-1554-4f89-8772-ef0f913ec759/mini.png)](https://insight.sensiolabs.com/projects/20cf915b-1554-4f89-8772-ef0f913ec759)
 [![StyleCI](https://styleci.io/repos/57223826/shield)](https://styleci.io/repos/57223826)
 
 Did you ever dream of a tool creating powerful data models mixing traditional, efficient relational mappings with modern
@@ -269,28 +268,6 @@ UPDATE Baz
 SET misc = JSON_REPLACE(misc, '$."#type"', 'App\\\Entity\\\Bar')
 WHERE 'AppBundle\\\Entity\\\Bar' = JSON_EXTRACT(misc, '$."#type"');
 ```
-
-## Run tests
-
-To execute the test suite, you need running PostgreSQL and MySQL servers.
-Run the following commands in your shell to set mandatory environment variables:
-
-```bash
-export POSTGRESQL_HOST=127.0.0.1
-export POSTGRESQL_USER=dunglas
-export POSTGRESQL_PASSWORD=
-export POSTGRESQL_DBNAME=my_test_db
-
-export MYSQL_HOST=127.0.0.1
-export MYSQL_USER=dunglas
-export MYSQL_PASSWORD=
-export MYSQL_DBNAME="my_test_db
-```
-Databases must exist. Be careful, its content may be deleted.
-
-Run the test suite, execute [PHPUnit](https://phpunit.de/):
-
-    phpunit
 
 ## Credits
 
