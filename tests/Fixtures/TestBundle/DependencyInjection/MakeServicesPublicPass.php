@@ -20,6 +20,7 @@ class MakeServicesPublicPass implements CompilerPassInterface
             'doctrine.orm.default_entity_manager',
             'doctrine.dbal.default_connection',
             'doctrine',
+            'serializer',
         ];
 
         foreach ($services as $service) {

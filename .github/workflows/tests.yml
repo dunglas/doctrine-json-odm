@@ -1,0 +1,74 @@
+name: "tests"
+
+on: ["pull_request", "push"]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php-version: "7.1"
+          - php-version: "7.2"
+          - php-version: "7.3"
+          - php-version: "7.4"
+          - php-version: "8.0"
+          - php-version: "8.1"
+          - php-version: "8.1"
+            prefer: lowest
+
+    steps:
+      - name: Start MySQL
+        env:
+          MYSQL_PWD: root
+        run: |
+          sudo systemctl start mysql.service
+          mysql -uroot -e "create database odm";
+
+      - name: Start PostgreSQL
+        run: |
+          sudo systemctl start postgresql.service
+          pg_isready
+          sudo -u postgres psql -c "create user odm WITH PASSWORD 'odm';"
+          sudo -u postgres psql -c "create database odm OWNER odm;"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, pdo_pgsql
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}-${{ matrix.prefer }}-
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.prefer }}-
+
+      - name: Install dependencies
+        if: ${{ matrix.prefer != 'lowest' }}
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Install lowest dependencies
+        if: ${{ matrix.prefer == 'lowest' }}
+        run: composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
+
+      - name: Install PHPUnit
+        run: php vendor/bin/simple-phpunit install
+
+      - name: Run tests (MySQL)
+        env:
+          DATABASE_URL: mysql://root:root@localhost/odm?serverVersion=8.0
+        run: php vendor/bin/simple-phpunit
+
+      - name: Run tests (PostgreSQL)
+        env:
+          DATABASE_URL: postgresql://odm:odm@localhost/odm?serverVersion=14&charset=utf8
+        run: php vendor/bin/simple-phpunit

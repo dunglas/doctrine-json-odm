@@ -51,12 +51,7 @@ class AppKernel extends Kernel
         $db = getenv('DB');
         $container->loadFromExtension('doctrine', [
             'dbal' => [
-                'driver' => 'MYSQL' === $db ? 'pdo_mysql' : 'pdo_pgsql',
-                'host' => getenv("{$db}_HOST"),
-                'dbname' => getenv("{$db}_DBNAME"),
-                'user' => getenv("{$db}_USER"),
-                'password' => getenv("{$db}_PASSWORD"),
-                'charset' => 'UTF8',
+                'url' => '%env(resolve:DATABASE_URL)%',
             ],
             'orm' => [
                 'auto_generate_proxy_classes' => true,
