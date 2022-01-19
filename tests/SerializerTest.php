@@ -9,12 +9,12 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attribute;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Baz;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>

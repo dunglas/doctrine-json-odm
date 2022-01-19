@@ -16,18 +16,18 @@ if (method_exists(ArrayDenormalizer::class, 'setSerializer')) {
     // Symfony <=5.4
     final class Serializer extends BaseSerializer
     {
+        use SerializerTrait;
+
         private const KEY_TYPE = '#type';
         private const KEY_SCALAR = '#scalar';
-
-        use SerializerTrait;
     }
 } else {
     // Symfony >=6.0
     final class Serializer extends BaseSerializer
     {
+        use TypedSerializerTrait;
+
         private const KEY_TYPE = '#type';
         private const KEY_SCALAR = '#scalar';
-
-        use TypedSerializerTrait;
     }
 }
