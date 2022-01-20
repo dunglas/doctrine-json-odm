@@ -7,19 +7,12 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
+namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-/**
- * Fixture class to test object normalized as scalar values.
- *
- * @author Antonio J. García Lagar <aj@garcialagar.es>
- */
-class ScalarValue implements NormalizableInterface, DenormalizableInterface
+trait ScalarValueTrait
 {
     private $value;
 

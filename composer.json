@@ -17,7 +17,7 @@
     "doctrine/orm": "^2.6.3",
     "symfony/property-access": "^4.4 || ^5.4 || ^6.0",
     "symfony/property-info": "^4.4 || ^5.4 || ^6.0",
-    "symfony/serializer": "^4.4 || ^5.4"
+    "symfony/serializer": "^4.4 || ^5.4 || ^6.0"
   },
   "require-dev": {
     "doctrine/doctrine-bundle": "^1.12.13 || ^2.2",
