@@ -16,6 +16,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
 use Symfony\Component\Console\Input\StringInput;
 
 /**
@@ -191,5 +192,29 @@ class FunctionalTest extends AbstractKernelTestCase
 
         $retrievedProduct = $manager->find(Product::class, $product->id);
         $this->assertEquals($attributes, $retrievedProduct->attributes);
+    }
+
+    /**
+     * @requires PHP 8.1
+     */
+    public function testStoreAndRetrieveEnum(): void
+    {
+        $attribute = new Attribute();
+        $attribute->key = 'email';
+        $attribute->value = InputMode::EMAIL;
+
+        $product = new Product();
+        $product->name = 'My product';
+        $product->attributes = [$attribute];
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+        $manager->persist($product);
+        $manager->flush();
+
+        $manager->clear();
+
+        $retrievedProduct = $manager->find(Product::class, $product->id);
+
+        $this->assertSame(InputMode::EMAIL, $retrievedProduct->attributes[0]->value);
     }
 }
