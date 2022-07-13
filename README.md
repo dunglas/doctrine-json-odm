@@ -194,6 +194,39 @@ Yes! You can execute complex queries using [native queries](https://www.doctrine
 
 Alternatively, install [scienta/doctrine-json-functions](https://github.com/ScientaNL/DoctrineJsonFunctions) to be able to use run JSON functions in DQL and query builders.
 
+**How to change the (de)serialization context**
+
+You may need to change the (de)serialization context, for instance to avoid escaping slashes.
+
+If you are using Symfony, modify your Kernel like this:
+
+```php
+<?php
+// src/Kernel.php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Doctrine\DBAL\Types\Type;
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+
+class Kernel extends BaseKernel
+{
+    use MicroKernelTrait;
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        $type = Type::getType('json_document');
+        $type->setSerializationContext([JsonEncode::OPTIONS => JSON_UNESCAPED_SLASHES]);
+    }
+}
+```
+
 **How can I add additional normalizers?**
 
 The Symfony Serializer is easily extensible. This bundle registers and uses a service with ID `dunglas_doctrine_json_odm.serializer` as the serializer for the JSON type. This means we can easily override it in our `services.yaml` to use additional normalizers.
