@@ -223,6 +223,7 @@ class Kernel extends BaseKernel
 
         $type = Type::getType('json_document');
         $type->setSerializationContext([JsonEncode::OPTIONS => JSON_UNESCAPED_SLASHES]);
+        $type->setDeserializationContext([/* ... */]);
     }
 }
 ```
