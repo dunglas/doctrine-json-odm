@@ -11,6 +11,7 @@ namespace Dunglas\DoctrineJsonOdm\Bundle;
 
 use Doctrine\DBAL\Types\Type;
 use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
+use Dunglas\DoctrineJsonOdm\TypeMapper;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -34,5 +35,7 @@ final class DunglasDoctrineJsonOdmBundle extends Bundle
     {
         $type = Type::getType('json_document');
         $type->setSerializer($this->container->get('dunglas_doctrine_json_odm.serializer'));
+
+        TypeMapper::$map = $this->container->getParameter('dunglas_doctrine_json_odm.type_map');
     }
 }

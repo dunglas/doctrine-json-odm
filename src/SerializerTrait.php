@@ -27,7 +27,8 @@ trait SerializerTrait
         $normalizedData = parent::normalize($data, $format, $context);
 
         if (\is_object($data)) {
-            $typeData = [self::KEY_TYPE => \get_class($data)];
+            $typeName = TypeMapper::getTypeByClass(\get_class($data));
+            $typeData = [self::KEY_TYPE => $typeName];
             $valueData = is_scalar($normalizedData) ? [self::KEY_SCALAR => $normalizedData] : $normalizedData;
             $normalizedData = array_merge($typeData, $valueData);
         }
@@ -43,7 +44,7 @@ trait SerializerTrait
     public function denormalize($data, $type, $format = null, array $context = [])
     {
         if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
-            $keyType = $data[self::KEY_TYPE];
+            $keyType = TypeMapper::getClassByType($data[self::KEY_TYPE]);
             unset($data[self::KEY_TYPE]);
 
             $data = $data[self::KEY_SCALAR] ?? $data;

@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\Bundle\DependencyInjection;
 
+use Dunglas\DoctrineJsonOdm\TypeMapper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -50,5 +51,8 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
         if (!class_exists(BackedEnumNormalizer::class) || !class_exists(\BackedEnum::class)) {
             $container->removeDefinition('dunglas_doctrine_json_odm.normalizer.backed_enum');
         }
+
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        $container->setParameter('dunglas_doctrine_json_odm.type_map', $config['types']);
     }
 }
