@@ -40,12 +40,13 @@ use Dunglas\DoctrineJsonOdm\Serializer;
 use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 if (!Type::hasType('json_document')) {
     Type::addType('json_document', JsonDocumentType::class);
     Type::getType('json_document')->setSerializer(
-        new Serializer([new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
+        new Serializer([new ArrayDenormalizer(), new DateTimeNormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
     );
 }
 
