@@ -14,6 +14,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 
 /**
@@ -122,6 +123,34 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertArrayHasKey('#scalar', $decodeData);
         $this->assertSame($value->value(), $decodeData['#scalar']);
         $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testTypeIsMappedFromConfig(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);dump($data);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame('mappedType', $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testClassNameAlsoWorksForMappedTypes(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $serialized = json_encode([
+            '#type' => WithMappedType::class,
+            'foo' => 'bar'
+        ]);
+
+        $restoredValue = $serializer->deserialize($serialized, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
     }

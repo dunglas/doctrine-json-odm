@@ -10,6 +10,7 @@
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\MakeServicesPublicPass;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\TestBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -48,7 +49,6 @@ class AppKernel extends Kernel
             'test' => null,
         ]);
 
-        $db = getenv('DB');
         $container->loadFromExtension('doctrine', [
             'dbal' => [
                 'url' => '%env(resolve:DATABASE_URL)%',
@@ -57,6 +57,12 @@ class AppKernel extends Kernel
                 'auto_generate_proxy_classes' => true,
                 'auto_mapping' => true,
             ],
+        ]);
+
+        $container->loadFromExtension('dunglas_doctrine_json_odm', [
+            'types' => [
+                'mappedType' => WithMappedType::class
+            ]
         ]);
 
         // Make a few services public until we depend on Symfony 4.1+ and can use the new test container
