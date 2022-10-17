@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                     ->scalarPrototype()
                         ->cannotBeEmpty()
                         ->validate()
-                            ->ifTrue(static function ($v): bool {
+                            ->ifTrue(static function (string $v): bool {
                                 return !class_exists($v);
                             })
                             ->thenInvalid('Use fully qualified classnames as type values')
