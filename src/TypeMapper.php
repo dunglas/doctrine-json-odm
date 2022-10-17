@@ -12,23 +12,35 @@ namespace Dunglas\DoctrineJsonOdm;
 /**
  * Allows using string constants in place of class names.
  */
-class TypeMapper
+class TypeMapper implements TypeMapperInterface
 {
     /**
      * @var array<class-string, string>
      */
-    public static $map;
+    private $classToType;
+
+    /**
+     * @var array<string, class-string>
+     */
+    private $typeToClass;
+
+    /**
+     * @param array<class-string, string> $classToType
+     */
+    public function __construct(array $classToType)
+    {
+        $this->classToType = $classToType;
+        $this->typeToClass = array_flip($classToType);
+    }
 
     /**
      * Falls back to class name itself.
      *
      * @param class-string $class
      */
-    public static function getTypeByClass(string $class): string
+    public function getTypeByClass(string $class): string
     {
-        $type = array_search($class, self::$map);
-
-        return $type ?: $class;
+        return $this->typeToClass[$class] ?? $class;
     }
 
     /**
@@ -36,8 +48,8 @@ class TypeMapper
      *
      * @return class-string
      */
-    public static function getClassByType(string $type): string
+    public function getClassByType(string $type): string
     {
-        return self::$map[$type] ?? $type;
+        return $this->classToType[$type] ?? $type;
     }
 }

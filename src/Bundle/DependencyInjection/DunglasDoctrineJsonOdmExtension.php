@@ -9,8 +9,10 @@
 
 namespace Dunglas\DoctrineJsonOdm\Bundle\DependencyInjection;
 
+use Dunglas\DoctrineJsonOdm\TypeMapper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -52,6 +54,13 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
         }
 
         $config = $this->processConfiguration(new Configuration(), $configs);
-        $container->setParameter('dunglas_doctrine_json_odm.type_map', $config['types']);
+
+        $typeMapConfig = $config['types'];
+        if ($typeMapConfig) {
+            $container->setDefinition(
+                'dunglas_doctrine_json_odm.type_mapper',
+                new Definition(TypeMapper::class, [$config['types']])
+            );
+        }
     }
 }
