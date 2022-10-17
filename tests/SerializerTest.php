@@ -132,7 +132,7 @@ class SerializerTest extends AbstractKernelTestCase
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $value = new WithMappedType();
         $data = $serializer->serialize($value, 'json');
-        $decodeData = json_decode($data, true);dump($data);
+        $decodeData = json_decode($data, true);
         $this->assertArrayHasKey('#type', $decodeData);
         $this->assertSame('mappedType', $decodeData['#type']);
         $restoredValue = $serializer->deserialize($data, '', 'json');
@@ -151,6 +151,27 @@ class SerializerTest extends AbstractKernelTestCase
         ]);
 
         $restoredValue = $serializer->deserialize($serialized, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testItWorksWithoutTypeMapper(): void
+    {
+        $container = self::$kernel->getContainer();
+
+        $serializer = $container->get('dunglas_doctrine_json_odm.serializer');
+
+        // Can't replace type mapper service in container as it is already initialised at this point, so going the dirty way
+        $refl = new \ReflectionProperty($serializer, 'typeMapper');
+        $refl->setAccessible(true);
+        $refl->setValue($serializer, null);
+
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame(WithMappedType::class, $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
     }
