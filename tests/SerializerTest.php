@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\AppKernelWithCustomTypeMapper;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\AppKernelWithTypeMap;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
@@ -174,6 +175,24 @@ class SerializerTest extends AbstractKernelTestCase
         ]);
 
         $restoredValue = $serializer->deserialize($serialized, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testCustomTypeMapper(): void
+    {
+        self::ensureKernelShutdown();
+        self::$class = AppKernelWithCustomTypeMapper::class;
+        self::bootKernel();
+
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame('customTypeAlias', $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
     }
