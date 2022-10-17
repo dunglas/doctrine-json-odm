@@ -130,9 +130,9 @@ class SerializerTest extends AbstractKernelTestCase
 
     public function testTypeMappingIsOptional(): void
     {
-        $container = self::$kernel->getContainer();
+        $this->assertFalse(self::$container->has('dunglas_doctrine_json_odm.type_mapper'));
 
-        $serializer = $container->get('dunglas_doctrine_json_odm.serializer');
+        $serializer = self::$container->get('dunglas_doctrine_json_odm.serializer');
 
         $value = new WithMappedType();
         $data = $serializer->serialize($value, 'json');
@@ -148,7 +148,8 @@ class SerializerTest extends AbstractKernelTestCase
     {
         $this->useTypeMapConfig();
 
-        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $serializer = self::$container->get('dunglas_doctrine_json_odm.serializer');
+
         $value = new WithMappedType();
         $data = $serializer->serialize($value, 'json');
         $decodeData = json_decode($data, true);
@@ -163,9 +164,7 @@ class SerializerTest extends AbstractKernelTestCase
     {
         $this->useTypeMapConfig();
 
-        $container = self::$kernel->getContainer();
-
-        $serializer = $container->get('dunglas_doctrine_json_odm.serializer');
+        $serializer = self::$container->get('dunglas_doctrine_json_odm.serializer');
 
         $value = new WithMappedType();
         $serialized = json_encode([
@@ -183,5 +182,7 @@ class SerializerTest extends AbstractKernelTestCase
         self::ensureKernelShutdown();
         self::$class = AppKernelWithTypeMap::class;
         self::bootKernel();
+
+        $this->assertTrue(self::$container->has('dunglas_doctrine_json_odm.type_mapper'));
     }
 }
