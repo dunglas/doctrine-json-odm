@@ -10,7 +10,6 @@
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\MakeServicesPublicPass;
-use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\TestBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;

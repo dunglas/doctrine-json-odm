@@ -169,7 +169,7 @@ class SerializerTest extends AbstractKernelTestCase
         $value = new WithMappedType();
         $serialized = json_encode([
             '#type' => WithMappedType::class,
-            'foo' => 'bar'
+            'foo' => 'bar',
         ]);
 
         $restoredValue = $serializer->deserialize($serialized, '', 'json');

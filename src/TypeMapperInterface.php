@@ -15,14 +15,14 @@ namespace Dunglas\DoctrineJsonOdm;
 interface TypeMapperInterface
 {
     /**
-     * Resolve type name from class
+     * Resolve type name from class.
      *
      * @param class-string $class
      */
     public function getTypeByClass(string $class): string;
 
     /**
-     * Resolve class from type name
+     * Resolve class from type name.
      *
      * @return class-string
      */

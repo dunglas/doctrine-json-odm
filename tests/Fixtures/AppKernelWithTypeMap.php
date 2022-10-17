@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) Kévin Dunglas <dunglas@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures;
 
 use AppKernel;
@@ -15,9 +22,8 @@ class AppKernelWithTypeMap extends AppKernel
 
         $container->loadFromExtension('dunglas_doctrine_json_odm', [
             'types' => [
-                'mappedType' => WithMappedType::class
-            ]
+                'mappedType' => WithMappedType::class,
+            ],
         ]);
     }
-
 }
