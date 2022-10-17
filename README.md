@@ -154,6 +154,34 @@ $foo = $entityManager->find(Foo::class, $foo->getId());
 var_dump($foo->misc); // Same as what we set earlier
 ```
 
+### Using type aliases
+
+Using custom type aliases as `#type` rather than FQCNs has a couple of benefits:
+- In case you move or rename your document classes, you can just update your type map without migrating db content
+- For applications that might store millions of records with json documents, this can also save some storage space
+
+In order to use type aliases, add the bundle configuration, e.g. in `config/packages/doctrine_json_odm.yaml`:
+```yaml
+dunglas_doctrine_json_odm:
+    types:
+        foo: App\Something\Foo
+        bar: App\SomethingElse\Bar
+```
+
+With this, `Foo` objects will be serialized as
+```json
+{ "#type": "foo", "someProperty": "someValue" }
+```
+
+Another option is to use your own custom type mapper implementing `Dunglas\DoctrineJsonOdm\TypeMapperInterface`. For this, just override the service definition:
+
+```yaml
+services:
+    dunglas_doctrine_json_odm.type_mapper: '@App\Something\MyFancyTypeMapper'
+```
+
+You can add type aliases at any point in time. Already persisted json documents with class names will still get deserialized correctly.
+
 ### Limitations when updating nested properties
 
 Due to how Doctrine works, it will not detect changes to nested objects or properties.
@@ -247,7 +275,7 @@ As a side note: If you happen to use [Autowiring](https://symfony.com/doc/curren
 
 **When the namespace of a used entity changes**
 
-Because we store the `#type` along with the data in the database, you have to migrate the already existing data in your database to reflect the new namespace.
+For classes without [type aliases](#using-type-aliases), because we store the `#type` along with the data in the database, you have to migrate the already existing data in your database to reflect the new namespace.
 
 Example: If we have a project that we migrate from `AppBundle` to `App`, we have the namespace `AppBundle/Entity/Bar` in our database which has to become `App/Entity/Bar` instead.
 
