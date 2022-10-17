@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\AppKernelWithTypeMap;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
@@ -127,8 +128,26 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals($value, $restoredValue);
     }
 
+    public function testTypeMappingIsOptional(): void
+    {
+        $container = self::$kernel->getContainer();
+
+        $serializer = $container->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame(WithMappedType::class, $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
     public function testTypeIsMappedFromConfig(): void
     {
+        $this->useTypeMapConfig();
+
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
         $value = new WithMappedType();
         $data = $serializer->serialize($value, 'json');
@@ -142,7 +161,11 @@ class SerializerTest extends AbstractKernelTestCase
 
     public function testClassNameAlsoWorksForMappedTypes(): void
     {
-        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $this->useTypeMapConfig();
+
+        $container = self::$kernel->getContainer();
+
+        $serializer = $container->get('dunglas_doctrine_json_odm.serializer');
 
         $value = new WithMappedType();
         $serialized = json_encode([
@@ -155,24 +178,10 @@ class SerializerTest extends AbstractKernelTestCase
         $this->assertEquals($value, $restoredValue);
     }
 
-    public function testItWorksWithoutTypeMapper(): void
+    private function useTypeMapConfig(): void
     {
-        $container = self::$kernel->getContainer();
-
-        $serializer = $container->get('dunglas_doctrine_json_odm.serializer');
-
-        // Can't replace type mapper service in container as it is already initialised at this point, so going the dirty way
-        $refl = new \ReflectionProperty($serializer, 'typeMapper');
-        $refl->setAccessible(true);
-        $refl->setValue($serializer, null);
-
-        $value = new WithMappedType();
-        $data = $serializer->serialize($value, 'json');
-        $decodeData = json_decode($data, true);
-        $this->assertArrayHasKey('#type', $decodeData);
-        $this->assertSame(WithMappedType::class, $decodeData['#type']);
-        $restoredValue = $serializer->deserialize($data, '', 'json');
-
-        $this->assertEquals($value, $restoredValue);
+        self::ensureKernelShutdown();
+        self::$class = AppKernelWithTypeMap::class;
+        self::bootKernel();
     }
 }

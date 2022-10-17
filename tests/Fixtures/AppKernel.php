@@ -59,12 +59,6 @@ class AppKernel extends Kernel
             ],
         ]);
 
-        $container->loadFromExtension('dunglas_doctrine_json_odm', [
-            'types' => [
-                'mappedType' => WithMappedType::class
-            ]
-        ]);
-
         // Make a few services public until we depend on Symfony 4.1+ and can use the new test container
         $container->addCompilerPass(new MakeServicesPublicPass());
     }
