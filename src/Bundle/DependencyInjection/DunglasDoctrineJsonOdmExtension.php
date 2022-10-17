@@ -49,7 +49,7 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        if (!class_exists(BackedEnumNormalizer::class) || !class_exists(\BackedEnum::class)) {
+        if (PHP_VERSION_ID < 80100 || !class_exists(BackedEnumNormalizer::class)) {
             $container->removeDefinition('dunglas_doctrine_json_odm.normalizer.backed_enum');
         }
 

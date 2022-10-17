@@ -17,6 +17,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -184,5 +185,22 @@ class SerializerTest extends AbstractKernelTestCase
         self::bootKernel();
 
         $this->assertTrue(self::$kernel->getContainer()->get('test.service_container')->has('dunglas_doctrine_json_odm.type_mapper'));
+    }
+
+    /**
+     * @requires PHP 8.1
+     */
+    public function testSerializeEnum(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = InputMode::EMAIL;
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame(InputMode::class, $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
     }
 }
