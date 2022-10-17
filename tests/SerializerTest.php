@@ -130,7 +130,7 @@ class SerializerTest extends AbstractKernelTestCase
 
     public function testTypeMappingIsOptional(): void
     {
-        $this->assertFalse(self::$container->has('dunglas_doctrine_json_odm.type_mapper'));
+        $this->assertFalse(self::$kernel->getContainer()->get('test.service_container')->has('dunglas_doctrine_json_odm.type_mapper'));
 
         $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
 
@@ -183,6 +183,6 @@ class SerializerTest extends AbstractKernelTestCase
         self::$class = AppKernelWithTypeMap::class;
         self::bootKernel();
 
-        $this->assertTrue(self::$container->has('dunglas_doctrine_json_odm.type_mapper'));
+        $this->assertTrue(self::$kernel->getContainer()->get('test.service_container')->has('dunglas_doctrine_json_odm.type_mapper'));
     }
 }
