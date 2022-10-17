@@ -14,6 +14,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    /**
+     * @return TreeBuilder
+     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('dunglas_doctrine_json_odm');
