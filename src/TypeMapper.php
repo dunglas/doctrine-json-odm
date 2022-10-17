@@ -12,7 +12,7 @@ namespace Dunglas\DoctrineJsonOdm;
 /**
  * Allows using string constants in place of class names.
  */
-class TypeMapper implements TypeMapperInterface
+final class TypeMapper implements TypeMapperInterface
 {
     /**
      * @var array<class-string, string>
