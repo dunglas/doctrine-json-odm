@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-                ->arrayNode('types')
+                ->arrayNode('type_map')
                     ->defaultValue([])
                     ->useAttributeAsKey('type')
                     ->scalarPrototype()

@@ -21,7 +21,7 @@ class AppKernelWithTypeMap extends AppKernel
         parent::configureContainer($container, $loader);
 
         $container->loadFromExtension('dunglas_doctrine_json_odm', [
-            'types' => [
+            'type_map' => [
                 'mappedType' => WithMappedType::class,
             ],
         ]);

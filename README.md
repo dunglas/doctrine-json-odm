@@ -163,7 +163,7 @@ Using custom type aliases as `#type` rather than FQCNs has a couple of benefits:
 In order to use type aliases, add the bundle configuration, e.g. in `config/packages/doctrine_json_odm.yaml`:
 ```yaml
 dunglas_doctrine_json_odm:
-    types:
+    type_map:
         foo: App\Something\Foo
         bar: App\SomethingElse\Bar
 ```
