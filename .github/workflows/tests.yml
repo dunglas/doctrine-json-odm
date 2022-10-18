@@ -28,6 +28,13 @@ jobs:
           sudo systemctl start mysql.service
           mysql -uroot -e "create database odm";
 
+      - name: Use legacy password hashing in MySQL
+        if: ${{ contains(fromJson('["7.1", "7.2", "7.3"]'), matrix.php-version) }}
+        env:
+          MYSQL_PWD: root
+        run: |
+          mysql -uroot -e "ALTER USER root IDENTIFIED WITH mysql_native_password BY 'root'";
+
       - name: Start PostgreSQL
         run: |
           sudo systemctl start postgresql.service
