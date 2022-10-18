@@ -16,11 +16,11 @@ class CustomTypeMapper implements TypeMapperInterface
 {
     public function getTypeByClass(string $class): string
     {
-        return 'customTypeAlias';
+        return $class === WithMappedType::class ? 'customTypeAlias' : $class;
     }
 
     public function getClassByType(string $type): string
     {
-        return WithMappedType::class;
+        return $type === 'customTypeAlias' ? WithMappedType::class : $type;
     }
 }
