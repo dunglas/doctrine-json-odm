@@ -5,21 +5,28 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="dunglas_doctrine_json_odm.circular_reference_handler" class="Dunglas\DoctrineJsonOdm\CircularReferenceHandler" public="false">
+        </service>
         <service id="dunglas_doctrine_json_odm.normalizer.object" class="Symfony\Component\Serializer\Normalizer\ObjectNormalizer" public="false">
             <argument type="service" id="serializer.mapping.class_metadata_factory" on-invalid="ignore" />
             <argument>null</argument><!-- name converter -->
             <argument type="service" id="serializer.property_accessor" />
             <argument type="service" id="property_info" on-invalid="ignore" />
             <argument type="service" id="serializer.mapping.class_discriminator_resolver" on-invalid="ignore" />
+            <argument>null</argument>
+            <argument type="collection">
+                <argument key="circular_reference_handler" type="service" id="dunglas_doctrine_json_odm.circular_reference_handler" />
+            </argument>
         </service>
 
+        <service id="dunglas_doctrine_json_odm.normalizer.datetimezone" class="Symfony\Component\Serializer\Normalizer\DateTimeZoneNormalizer" public="false" />
+        <service id="dunglas_doctrine_json_odm.normalizer.datetime" class="Symfony\Component\Serializer\Normalizer\DateTimeNormalizer" public="false" />
         <service id="dunglas_doctrine_json_odm.normalizer.array" class="Symfony\Component\Serializer\Normalizer\ArrayDenormalizer" public="false" />
-
-        <service id="dunglas_doctrine_json_odm.normalizer.backed_enum" class="Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer" public="false" />
 
         <service id="dunglas_doctrine_json_odm.serializer" class="Dunglas\DoctrineJsonOdm\Serializer" public="true">
             <argument type="collection">
-                <argument type="service" id="dunglas_doctrine_json_odm.normalizer.backed_enum" on-invalid="ignore" />
+                <argument type="service" id="dunglas_doctrine_json_odm.normalizer.datetimezone" />
+                <argument type="service" id="dunglas_doctrine_json_odm.normalizer.datetime" />
                 <argument type="service" id="dunglas_doctrine_json_odm.normalizer.array" />
                 <argument type="service" id="dunglas_doctrine_json_odm.normalizer.object" />
             </argument>
