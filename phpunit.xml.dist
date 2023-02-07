@@ -9,6 +9,7 @@
         <ini name="error_reporting" value="-1" />
         <server name="KERNEL_DIR" value="tests/Fixtures" />
         <server name="KERNEL_CLASS" value="AppKernel" />
+        <server name="DATABASE_URL" value="sqlite://memory" />
         <server name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=7" />
     </php>
 
