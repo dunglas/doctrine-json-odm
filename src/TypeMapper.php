@@ -15,22 +15,22 @@ namespace Dunglas\DoctrineJsonOdm;
 final class TypeMapper implements TypeMapperInterface
 {
     /**
-     * @var array<class-string, string>
-     */
-    private $classToType;
-
-    /**
      * @var array<string, class-string>
      */
     private $typeToClass;
 
     /**
-     * @param array<class-string, string> $classToType
+     * @var array<class-string, string>
      */
-    public function __construct(array $classToType)
+    private $classToType;
+
+    /**
+     * @param array<class-string, string> $typeToClass
+     */
+    public function __construct(array $typeToClass)
     {
-        $this->classToType = $classToType;
-        $this->typeToClass = array_flip($classToType);
+        $this->typeToClass = $typeToClass;
+        $this->classToType = array_flip($typeToClass);
     }
 
     /**
@@ -40,7 +40,7 @@ final class TypeMapper implements TypeMapperInterface
      */
     public function getTypeByClass(string $class): string
     {
-        return $this->typeToClass[$class] ?? $class;
+        return $this->classToType[$class] ?? $class;
     }
 
     /**
@@ -50,6 +50,6 @@ final class TypeMapper implements TypeMapperInterface
      */
     public function getClassByType(string $type): string
     {
-        return $this->classToType[$type] ?? $type;
+        return $this->typeToClass[$type] ?? $type;
     }
 }

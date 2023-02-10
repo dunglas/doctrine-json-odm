@@ -53,10 +53,9 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
 
         $config = $this->processConfiguration(new Configuration(), $configs);
 
-        $typeMapConfig = $config['type_map'] ?? [];
-        $container->setParameter('dunglas_doctrine_json_odm.type_map', $typeMapConfig);
-
-        if (!$typeMapConfig) {
+        if ($config['type_map'] ?? []) {
+            $container->getDefinition('dunglas_doctrine_json_odm.type_mapper')->addArgument($config['type_map']);
+        } else {
             $container->removeDefinition('dunglas_doctrine_json_odm.type_mapper');
         }
     }

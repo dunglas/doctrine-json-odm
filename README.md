@@ -160,6 +160,10 @@ Using custom type aliases as `#type` rather than FQCNs has a couple of benefits:
 - In case you move or rename your document classes, you can just update your type map without migrating db content
 - For applications that might store millions of records with json documents, this can also save some storage space
 
+You can introduce type aliases at any point in time. Already persisted json documents with class names will still get deserialized correctly.
+
+#### Using Symfony
+
 In order to use type aliases, add the bundle configuration, e.g. in `config/packages/doctrine_json_odm.yaml`:
 ```yaml
 dunglas_doctrine_json_odm:
@@ -180,7 +184,34 @@ services:
     dunglas_doctrine_json_odm.type_mapper: '@App\Something\MyFancyTypeMapper'
 ```
 
-You can add type aliases at any point in time. Already persisted json documents with class names will still get deserialized correctly.
+### Without Symfony
+
+When instantiating `Dunglas\DoctrineJsonOdm\Serializer`, you need to pass an extra argument that implements `Dunglas\DoctrineJsonOdm\TypeMapperInterface`.
+
+For using the built-in type mapper:
+
+```php
+    // …
+    use Dunglas\DoctrineJsonOdm\Serializer;
+    use Dunglas\DoctrineJsonOdm\TypeMapper;
+    use App\Something\Foo;
+    use App\SomethingElse\Bar;
+    
+    // For using the built-in type mapper:
+    $typeMapper = new TypeMapper([
+        'foo' => Foo::class,
+        'bar' => Bar::class,
+    ]);
+    
+    // Or implement TypeMapperInterface with your own class:
+    $typeMapper = new MyTypeMapper();
+
+    // Then pass it into the Serializer constructor
+    Type::getType('json_document')->setSerializer(
+        new Serializer([new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()], $typeMapper)
+    );
+```
+
 
 ### Limitations when updating nested properties
 
