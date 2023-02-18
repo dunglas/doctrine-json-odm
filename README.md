@@ -157,14 +157,15 @@ var_dump($foo->misc); // Same as what we set earlier
 ### Using type aliases
 
 Using custom type aliases as `#type` rather than FQCNs has a couple of benefits:
-- In case you move or rename your document classes, you can just update your type map without migrating db content
-- For applications that might store millions of records with json documents, this can also save some storage space
+- In case you move or rename your document classes, you can just update your type map without migrating database content
+- For applications that might store millions of records with JSON documents, this can also save some storage space
 
-You can introduce type aliases at any point in time. Already persisted json documents with class names will still get deserialized correctly.
+You can introduce type aliases at any point in time. Already persisted JSON documents with class names will still get deserialized correctly.
 
 #### Using Symfony
 
 In order to use type aliases, add the bundle configuration, e.g. in `config/packages/doctrine_json_odm.yaml`:
+
 ```yaml
 dunglas_doctrine_json_odm:
     type_map:
@@ -172,7 +173,8 @@ dunglas_doctrine_json_odm:
         bar: App\SomethingElse\Bar
 ```
 
-With this, `Foo` objects will be serialized as
+With this, `Foo` objects will be serialized as:
+
 ```json
 { "#type": "foo", "someProperty": "someValue" }
 ```
@@ -184,7 +186,7 @@ services:
     dunglas_doctrine_json_odm.type_mapper: '@App\Something\MyFancyTypeMapper'
 ```
 
-### Without Symfony
+#### Without Symfony
 
 When instantiating `Dunglas\DoctrineJsonOdm\Serializer`, you need to pass an extra argument that implements `Dunglas\DoctrineJsonOdm\TypeMapperInterface`.
 
