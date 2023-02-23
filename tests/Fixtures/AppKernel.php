@@ -46,6 +46,7 @@ class AppKernel extends Kernel
         $container->loadFromExtension('framework', [
             'secret' => 'jsonodm',
             'test' => null,
+            'http_method_override' => false,
         ]);
 
         $container->loadFromExtension('doctrine', [

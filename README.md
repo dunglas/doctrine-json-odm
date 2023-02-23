@@ -40,12 +40,14 @@ use Dunglas\DoctrineJsonOdm\Serializer;
 use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 if (!Type::hasType('json_document')) {
     Type::addType('json_document', JsonDocumentType::class);
     Type::getType('json_document')->setSerializer(
-        new Serializer([new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
+        new Serializer([new BackedEnumNormalizer(), new DateTimeNormalizer(), new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
     );
 }
 
@@ -214,7 +216,6 @@ For using the built-in type mapper:
     );
 ```
 
-
 ### Limitations when updating nested properties
 
 Due to how Doctrine works, it will not detect changes to nested objects or properties.
@@ -291,20 +292,22 @@ class Kernel extends BaseKernel
 
 **How can I add additional normalizers?**
 
-The Symfony Serializer is easily extensible. This bundle registers and uses a service with ID `dunglas_doctrine_json_odm.serializer` as the serializer for the JSON type. This means we can easily override it in our `services.yaml` to use additional normalizers.
-As an example we use the Symfony `DateTimeNormalizer` service, so we do have support for any property that is an instance of `\DateTimeInterface`. Be aware that the order of the normalizers might be relevant depending on the normalizers you use.
+The Symfony Serializer is easily extensible. This bundle registers and uses a service with ID `dunglas_doctrine_json_odm.serializer` as the serializer for the JSON type.
+This means we can easily override it in our `services.yaml` to use additional normalizers.
+As an example we inject a custom normalizer service. Be aware that the order of the normalizers might be relevant depending on the normalizers you use.
 
 ```yaml
     # Add DateTime Normalizer to Dunglas' Doctrine JSON ODM Bundle
     dunglas_doctrine_json_odm.serializer:
         class: Dunglas\DoctrineJsonOdm\Serializer
         arguments:
-          - ['@dunglas_doctrine_json_odm.normalizer.array', '@serializer.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.object']
+          - ['@App\MyCustom\Normalizer', '@?dunglas_doctrine_json_odm.normalizer.backed_enum', '@dunglas_doctrine_json_odm.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.array', '@dunglas_doctrine_json_odm.normalizer.object']
           - ['@serializer.encoder.json']
+          - '@?dunglas_doctrine_json_odm.type_mapper'
         public: true
+        autowire: false
+        autoconfigure: false
 ```
-
-As a side note: If you happen to use [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html) in your `services.yaml` you might need to set `autowire: false` too. Same goes for `autoconfigure: false` in case you're using [Autoconfiguration](https://symfony.com/doc/current/service_container.html#the-autoconfigure-option).
 
 **When the namespace of a used entity changes**
 
@@ -321,7 +324,7 @@ WHERE 'AppBundle\\\Entity\\\Bar' = JSON_EXTRACT(misc, '$."#type"');
 
 ## Credits
 
-This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
+This bundle is brought to you by [Kévin Dunglas](https://dunglas.dev) and [awesome contributors](https://github.com/dunglas/doctrine-json-odm/graphs/contributors).
 Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
 
 ## Former Maintainers
