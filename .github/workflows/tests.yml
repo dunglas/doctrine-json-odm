@@ -21,8 +21,6 @@ jobs:
         dependencies:
           - highest
         include:
-          - php-version: "8.1"
-            dependencies: lowest
           - php-version: "8.2"
             dependencies: lowest
       fail-fast: false
