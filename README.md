@@ -154,6 +154,67 @@ $foo = $entityManager->find(Foo::class, $foo->getId());
 var_dump($foo->misc); // Same as what we set earlier
 ```
 
+### Using type aliases
+
+Using custom type aliases as `#type` rather than FQCNs has a couple of benefits:
+- In case you move or rename your document classes, you can just update your type map without migrating database content
+- For applications that might store millions of records with JSON documents, this can also save some storage space
+
+You can introduce type aliases at any point in time. Already persisted JSON documents with class names will still get deserialized correctly.
+
+#### Using Symfony
+
+In order to use type aliases, add the bundle configuration, e.g. in `config/packages/doctrine_json_odm.yaml`:
+
+```yaml
+dunglas_doctrine_json_odm:
+    type_map:
+        foo: App\Something\Foo
+        bar: App\SomethingElse\Bar
+```
+
+With this, `Foo` objects will be serialized as:
+
+```json
+{ "#type": "foo", "someProperty": "someValue" }
+```
+
+Another option is to use your own custom type mapper implementing `Dunglas\DoctrineJsonOdm\TypeMapperInterface`. For this, just override the service definition:
+
+```yaml
+services:
+    dunglas_doctrine_json_odm.type_mapper: '@App\Something\MyFancyTypeMapper'
+```
+
+#### Without Symfony
+
+When instantiating `Dunglas\DoctrineJsonOdm\Serializer`, you need to pass an extra argument that implements `Dunglas\DoctrineJsonOdm\TypeMapperInterface`.
+
+For using the built-in type mapper:
+
+```php
+    // …
+    use Dunglas\DoctrineJsonOdm\Serializer;
+    use Dunglas\DoctrineJsonOdm\TypeMapper;
+    use App\Something\Foo;
+    use App\SomethingElse\Bar;
+    
+    // For using the built-in type mapper:
+    $typeMapper = new TypeMapper([
+        'foo' => Foo::class,
+        'bar' => Bar::class,
+    ]);
+    
+    // Or implement TypeMapperInterface with your own class:
+    $typeMapper = new MyTypeMapper();
+
+    // Then pass it into the Serializer constructor
+    Type::getType('json_document')->setSerializer(
+        new Serializer([new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()], $typeMapper)
+    );
+```
+
+
 ### Limitations when updating nested properties
 
 Due to how Doctrine works, it will not detect changes to nested objects or properties.
@@ -247,7 +308,7 @@ As a side note: If you happen to use [Autowiring](https://symfony.com/doc/curren
 
 **When the namespace of a used entity changes**
 
-Because we store the `#type` along with the data in the database, you have to migrate the already existing data in your database to reflect the new namespace.
+For classes without [type aliases](#using-type-aliases), because we store the `#type` along with the data in the database, you have to migrate the already existing data in your database to reflect the new namespace.
 
 Example: If we have a project that we migrate from `AppBundle` to `App`, we have the namespace `AppBundle/Entity/Bar` in our database which has to become `App/Entity/Bar` instead.
 

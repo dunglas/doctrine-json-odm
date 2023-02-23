@@ -17,6 +17,8 @@
 
         <service id="dunglas_doctrine_json_odm.normalizer.backed_enum" class="Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer" public="false" />
 
+        <service id="dunglas_doctrine_json_odm.type_mapper" class="Dunglas\DoctrineJsonOdm\TypeMapper" public="false" />
+
         <service id="dunglas_doctrine_json_odm.serializer" class="Dunglas\DoctrineJsonOdm\Serializer" public="true">
             <argument type="collection">
                 <argument type="service" id="dunglas_doctrine_json_odm.normalizer.backed_enum" on-invalid="ignore" />
@@ -27,6 +29,8 @@
             <argument type="collection">
                 <argument type="service" id="serializer.encoder.json" />
             </argument>
+
+            <argument type="service" id="dunglas_doctrine_json_odm.type_mapper" on-invalid="ignore" />
         </service>
     </services>
 </container>

@@ -195,7 +195,8 @@ class FunctionalTest extends AbstractKernelTestCase
     }
 
     /**
-     * @requires PHP 8.1
+     * @requires PHP >= 8.1
+     * @requires function \Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer::normalize
      */
     public function testStoreAndRetrieveEnum(): void
     {

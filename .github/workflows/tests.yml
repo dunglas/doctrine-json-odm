@@ -1,6 +1,9 @@
 name: "tests"
 
-on: ["pull_request", "push"]
+on:
+  pull_request: ~
+  push:
+    branches: [main]
 
 jobs:
   run:
@@ -14,19 +17,35 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
         dependencies:
           - highest
         include:
           - php-version: "8.1"
             dependencies: lowest
+          - php-version: "8.2"
+            dependencies: lowest
+      fail-fast: false
+
+    services:
+      database:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+        env:
+          MYSQL_ROOT_PASSWORD: odmroot
+          MYSQL_DATABASE: odm
+          MYSQL_USER: odm
+          MYSQL_PASSWORD: odm
 
     steps:
-      - name: Start MySQL
+      - name: Use legacy password hashing in MySQL
+        if: ${{ contains(fromJson('["7.1", "7.2", "7.3"]'), matrix.php-version) }}
         env:
-          MYSQL_PWD: root
+          MYSQL_PWD: odmroot
         run: |
-          sudo systemctl start mysql.service
-          mysql -uroot -e "create database odm";
+          mysql -h127.0.0.1 -uroot -e "ALTER USER odm IDENTIFIED WITH mysql_native_password BY 'odm'"
 
       - name: Start PostgreSQL
         run: |
@@ -54,7 +73,7 @@ jobs:
 
       - name: Run tests (MySQL)
         env:
-          DATABASE_URL: mysql://root:root@localhost/odm?serverVersion=8.0
+          DATABASE_URL: mysql://odm:odm@127.0.0.1/odm?serverVersion=8.0
         run: php vendor/bin/simple-phpunit
 
       - name: Run tests (PostgreSQL)

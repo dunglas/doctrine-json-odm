@@ -9,12 +9,16 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\AppKernelWithCustomTypeMapper;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\AppKernelWithTypeMap;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -121,6 +125,100 @@ class SerializerTest extends AbstractKernelTestCase
         $decodeData = json_decode($data, true);
         $this->assertArrayHasKey('#scalar', $decodeData);
         $this->assertSame($value->value(), $decodeData['#scalar']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testTypeMappingIsOptional(): void
+    {
+        $this->assertFalse(self::$kernel->getContainer()->get('test.service_container')->has('dunglas_doctrine_json_odm.type_mapper'));
+
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame(WithMappedType::class, $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testTypeIsMappedFromConfig(): void
+    {
+        $this->useTypeMapConfig();
+
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame('mappedType', $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testClassNameAlsoWorksForMappedTypes(): void
+    {
+        $this->useTypeMapConfig();
+
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $serialized = json_encode([
+            '#type' => WithMappedType::class,
+            'foo' => 'bar',
+        ]);
+
+        $restoredValue = $serializer->deserialize($serialized, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testCustomTypeMapper(): void
+    {
+        self::ensureKernelShutdown();
+        self::$class = AppKernelWithCustomTypeMapper::class;
+        self::bootKernel();
+
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new WithMappedType();
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame('customTypeAlias', $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    private function useTypeMapConfig(): void
+    {
+        self::ensureKernelShutdown();
+        self::$class = AppKernelWithTypeMap::class;
+        self::bootKernel();
+
+        $this->assertTrue(self::$kernel->getContainer()->get('test.service_container')->has('dunglas_doctrine_json_odm.type_mapper'));
+    }
+
+    /**
+     * @requires PHP >= 8.1
+     * @requires function \Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer::normalize
+     */
+    public function testSerializeEnum(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = InputMode::EMAIL;
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame(InputMode::class, $decodeData['#type']);
         $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);

@@ -48,7 +48,6 @@ class AppKernel extends Kernel
             'test' => null,
         ]);
 
-        $db = getenv('DB');
         $container->loadFromExtension('doctrine', [
             'dbal' => [
                 'url' => '%env(resolve:DATABASE_URL)%',
