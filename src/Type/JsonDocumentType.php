@@ -20,6 +20,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class JsonDocumentType extends JsonType
 {
+    public const NAME = 'json_document';
+
     /**
      * @var SerializerInterface
      */
@@ -119,6 +121,6 @@ final class JsonDocumentType extends JsonType
 
     public function getName(): string
     {
-        return 'json_document';
+        return self::NAME;
     }
 }
