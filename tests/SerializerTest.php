@@ -16,6 +16,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Vector;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
@@ -222,5 +223,17 @@ class SerializerTest extends AbstractKernelTestCase
         $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testIterable(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $vector = new Vector([1,2,3,4,5]);
+
+        $data = $serializer->serialize($vector, 'json');
+        $restoredVector = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($vector, $restoredVector);
     }
 }
