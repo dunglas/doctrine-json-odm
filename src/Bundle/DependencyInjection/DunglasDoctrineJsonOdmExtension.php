@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -49,6 +50,10 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
 
         if (PHP_VERSION_ID < 80100 || !class_exists(BackedEnumNormalizer::class)) {
             $container->removeDefinition('dunglas_doctrine_json_odm.normalizer.backed_enum');
+        }
+
+        if (!class_exists(UidNormalizer::class)) {
+            $container->removeDefinition('dunglas_doctrine_json_odm.normalizer.uid');
         }
 
         $config = $this->processConfiguration(new Configuration(), $configs);
