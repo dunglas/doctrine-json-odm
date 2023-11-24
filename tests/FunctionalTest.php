@@ -221,7 +221,6 @@ class FunctionalTest extends AbstractKernelTestCase
     }
 
     /**
-     * @requires PHP >= 8.1
      * @requires function \Symfony\Component\Serializer\Normalizer\UidNormalizer::normalize
      */
     public function testStoreAndRetrieveUid(): void
@@ -244,6 +243,7 @@ class FunctionalTest extends AbstractKernelTestCase
 
         $retrievedProduct = $manager->find(Product::class, $product->id);
 
-        $this->assertSame($uuid, $retrievedProduct->attributes[0]->value);
+        $this->assertInstanceOf(Uuid::class, $retrievedProduct->attributes[0]->value);
+        $this->assertEquals($uuid, (string) $retrievedProduct->attributes[0]->value);
     }
 }
