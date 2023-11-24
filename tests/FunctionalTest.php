@@ -18,6 +18,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -217,5 +218,32 @@ class FunctionalTest extends AbstractKernelTestCase
         $retrievedProduct = $manager->find(Product::class, $product->id);
 
         $this->assertSame(InputMode::EMAIL, $retrievedProduct->attributes[0]->value);
+    }
+
+    /**
+     * @requires PHP >= 8.1
+     * @requires function \Symfony\Component\Serializer\Normalizer\UidNormalizer::normalize
+     */
+    public function testStoreAndRetrieveUid(): void
+    {
+        $uuid = '1a87e1f2-1569-4493-a4a8-bc1915ca5631';
+
+        $attribute = new Attribute();
+        $attribute->key = 'uid';
+        $attribute->value = Uuid::fromString($uuid);
+
+        $product = new Product();
+        $product->name = 'My product';
+        $product->attributes = [$attribute];
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+        $manager->persist($product);
+        $manager->flush();
+
+        $manager->clear();
+
+        $retrievedProduct = $manager->find(Product::class, $product->id);
+
+        $this->assertSame($uuid, $retrievedProduct->attributes[0]->value);
     }
 }

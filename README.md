@@ -41,13 +41,14 @@ use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 if (!Type::hasType('json_document')) {
     Type::addType('json_document', JsonDocumentType::class);
     Type::getType('json_document')->setSerializer(
-        new Serializer([new BackedEnumNormalizer(), new DateTimeNormalizer(), new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
+        new Serializer([new BackedEnumNormalizer(), new UidNormalizer(), new DateTimeNormalizer(), new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
     );
 }
 
@@ -301,7 +302,7 @@ As an example we inject a custom normalizer service. Be aware that the order of 
     dunglas_doctrine_json_odm.serializer:
         class: Dunglas\DoctrineJsonOdm\Serializer
         arguments:
-          - ['@App\MyCustom\Normalizer', '@?dunglas_doctrine_json_odm.normalizer.backed_enum', '@dunglas_doctrine_json_odm.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.array', '@dunglas_doctrine_json_odm.normalizer.object']
+          - ['@App\MyCustom\Normalizer', '@?dunglas_doctrine_json_odm.normalizer.backed_enum', '@?dunglas_doctrine_json_odm.normalizer.uid', '@dunglas_doctrine_json_odm.normalizer.datetime', '@dunglas_doctrine_json_odm.normalizer.array', '@dunglas_doctrine_json_odm.normalizer.object']
           - ['@serializer.encoder.json']
           - '@?dunglas_doctrine_json_odm.type_mapper'
         public: true
