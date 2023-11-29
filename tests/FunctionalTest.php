@@ -221,7 +221,6 @@ class FunctionalTest extends AbstractKernelTestCase
     }
 
     /**
-     * @requires PHP >= 7.2
      * @requires function \Symfony\Component\Serializer\Normalizer\UidNormalizer::normalize
      */
     public function testStoreAndRetrieveUid(): void
