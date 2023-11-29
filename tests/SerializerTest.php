@@ -19,6 +19,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -219,6 +220,23 @@ class SerializerTest extends AbstractKernelTestCase
         $decodeData = json_decode($data, true);
         $this->assertArrayHasKey('#type', $decodeData);
         $this->assertSame(InputMode::class, $decodeData['#type']);
+        $restoredValue = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($value, $restoredValue);
+    }
+
+    /**
+     * @requires function \Symfony\Component\Serializer\Normalizer\UidNormalizer::normalize
+     */
+    public function testSerializeUid(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $value = new UuidV4('4a7ba820-c806-4579-a907-193a2493863b');
+        $data = $serializer->serialize($value, 'json');
+        $decodeData = json_decode($data, true);
+        $this->assertArrayHasKey('#type', $decodeData);
+        $this->assertSame(UuidV4::class, $decodeData['#type']);
         $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
