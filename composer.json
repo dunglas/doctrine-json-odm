@@ -28,6 +28,9 @@
     "symfony/phpunit-bridge": "^6.0",
     "symfony/uid": "^5.4 || ^6.0"
   },
+  "conflict": {
+    "symfony/doctrine-bridge": ">=7.0.0"
+  },
   "suggest": {
     "symfony/framework-bundle": "To use the provided bundle.",
     "scienta/doctrine-json-functions": "To add support for JSON functions in DQL."
