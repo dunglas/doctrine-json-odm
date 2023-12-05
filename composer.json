@@ -26,7 +26,8 @@
     "symfony/finder": "^5.4 || ^6.0 || ^7.0",
     "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0",
     "symfony/phpunit-bridge": "^6.0 || ^7.0",
-    "symfony/uid": "^5.4 || ^6.0 || ^7.0"
+    "symfony/uid": "^5.4 || ^6.0 || ^7.0",
+    "symfony/validator": "^5.4 || ^6.0 || ^7.0"
   },
   "suggest": {
     "symfony/framework-bundle": "To use the provided bundle.",
