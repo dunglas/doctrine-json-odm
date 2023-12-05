@@ -34,7 +34,5 @@ trait ScalarValueTrait
     public function denormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = [])
     {
         $this->value = $data;
-
-        return $this;
     }
 }

@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.0"
           - "8.1"
           - "8.2"
           - "8.3"
@@ -23,25 +22,25 @@ jobs:
       fail-fast: false
 
     services:
-      database:
+      mysql:
         image: mysql:8
         ports:
           - 3306:3306
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
         env:
-          MYSQL_ROOT_PASSWORD: odmroot
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: odm
-          MYSQL_USER: odm
-          MYSQL_PASSWORD: odm
+
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        options: --health-cmd "/usr/bin/pg_isready" --health-interval 10s --health-timeout 5s --health-retries 10
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: odm
 
     steps:
-      - name: Start PostgreSQL
-        run: |
-          sudo systemctl start postgresql.service
-          pg_isready
-          sudo -u postgres psql -c "create user odm WITH PASSWORD 'odm';"
-          sudo -u postgres psql -c "create database odm OWNER odm;"
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -61,10 +60,10 @@ jobs:
 
       - name: Run tests (MySQL)
         env:
-          DATABASE_URL: mysql://odm:odm@127.0.0.1/odm?serverVersion=8.0
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/odm?serverVersion=8.0
         run: php vendor/bin/simple-phpunit
 
       - name: Run tests (PostgreSQL)
         env:
-          DATABASE_URL: postgresql://odm:odm@localhost/odm?serverVersion=14&charset=utf8
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/odm?serverVersion=14&charset=utf8
         run: php vendor/bin/simple-phpunit

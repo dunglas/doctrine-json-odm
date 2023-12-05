@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
+#[ORM\Entity]
 class Product
 {
     /**
@@ -23,15 +24,22 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[
+        ORM\Column(type: "integer"),
+        ORM\Id,
+        ORM\GeneratedValue(strategy: "AUTO"),
+    ]
     public $id;
 
     /**
-     *  @ORM\Column(type="string")
+     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: "string")]
     public $name;
 
     /**
      * @ORM\Column(type="json_document", options={"jsonb": true}, nullable=true)
      */
+    #[ORM\Column(type: "json_document", nullable: true, options: ["jsonb" => true])]
     public $attributes;
 }
