@@ -22,25 +22,13 @@ final class JsonDocumentType extends JsonType
 {
     public const NAME = 'json_document';
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
-    /**
-     * @var string
-     */
-    private $format = 'json';
+    private string $format = 'json';
 
-    /**
-     * @var array
-     */
-    private $serializationContext = [];
+    private array $serializationContext = [];
 
-    /**
-     * @var array
-     */
-    private $deserializationContext = [];
+    private array $deserializationContext = [];
 
     /**
      * Sets the serializer to use.
@@ -88,10 +76,7 @@ final class JsonDocumentType extends JsonType
         $this->deserializationContext = $deserializationContext;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if (null === $value) {
             return null;
@@ -100,12 +85,7 @@ final class JsonDocumentType extends JsonType
         return $this->getSerializer()->serialize($value, $this->format, $this->serializationContext);
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return mixed
-     */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if (null === $value || $value === '') {
             return null;
