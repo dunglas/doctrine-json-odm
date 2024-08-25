@@ -2,16 +2,18 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document;
 
-class Vector implements \Iterator
+use Iterator;
+
+class Vector implements Iterator
 {
     private int $position;
 
     private array $array;
 
-    public function __construct(array $array = null)
+    public function __construct(array $array = [], int $position = 0)
     {
-        $this->array = $array ?? [];
-        $this->position = 0;
+        $this->array = $array;
+        $this->position = $position;
     }
 
     public function getArray(): array
@@ -24,22 +26,22 @@ class Vector implements \Iterator
         return $this->array[$this->key()];
     }
 
-	public function key(): mixed
+    public function key(): mixed
     {
         return $this->position;
     }
 
-	public function next(): void
+    public function next(): void
     {
         ++$this->position;
     }
 
-	public function rewind(): void
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
-	public function valid(): bool
+    public function valid(): bool
     {
         return isset($this->array[$this->key()]);
     }

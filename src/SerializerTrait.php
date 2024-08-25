@@ -41,53 +41,78 @@ trait SerializerTrait
      * @param mixed       $data
      * @param string|null $format
      *
-     * @return array|\ArrayObject|bool|float|int|string|null
+     * @return array|\ArrayObject|scalar|null
      */
     public function normalize($data, $format = null, array $context = [])
     {
-        $normalizedData = parent::normalize($data, $format, $context);
+        if (\is_array($data)) {
+            foreach ($data as &$datum) {
+                $datum = $this->normalize($datum, $format, $context);
+            }
+
+            return $data;
+        }
 
         if (\is_object($data)) {
             $typeName = \get_class($data);
+
+            $data = parent::normalize($data, $format, $context);
 
             if ($this->typeMapper) {
                 $typeName = $this->typeMapper->getTypeByClass($typeName);
             }
 
             $typeData = [self::KEY_TYPE => $typeName];
-            $valueData = is_scalar($normalizedData) ? [self::KEY_SCALAR => $normalizedData] : $normalizedData;
-            $normalizedData = array_merge($typeData, $valueData);
+
+            if (\is_scalar($data)) {
+                $data = [self::KEY_SCALAR => $data];
+            }
+            if (\is_array($data)) {
+                foreach ($data as &$datum) {
+                    $datum = $this->normalize($datum, $format, $context);
+                }
+            }
+
+            $data = \array_merge($typeData, $data);
         }
 
-        return $normalizedData;
+        return $data;
     }
 
     /**
-     * @param $data
+     * @param null|scalar|array $data
+     * @param string $type
+     * @param string|null $format
      *
      * @return mixed
      */
     public function denormalize($data, $type, $format = null, array $context = [])
     {
-        if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
+        if (!\is_array($data)) {
+            return $data;
+        }
+
+        if (isset($data[self::KEY_TYPE])) {
             $keyType = $data[self::KEY_TYPE];
+            unset($data[self::KEY_TYPE]);
 
             if ($this->typeMapper) {
                 $keyType = $this->typeMapper->getClassByType($keyType);
             }
 
-            unset($data[self::KEY_TYPE]);
-
             $data = $data[self::KEY_SCALAR] ?? $data;
-            $data = $this->denormalize($data, $keyType, $format, $context);
+
+            if (\is_array($data)) {
+                foreach ($data as &$datum) {
+                    $datum = $this->denormalize($datum, $keyType, $format, $context);
+                }
+            }
 
             return parent::denormalize($data, $keyType, $format, $context);
         }
 
-        if (is_iterable($data)) {
-            $type = ('' === $type) ? 'stdClass' : $type;
-
-            return parent::denormalize($data, $type.'[]', $format, $context);
+        foreach ($data as &$datum) {
+            $datum = $this->denormalize($datum, '', $format, $context);
         }
 
         return $data;
