@@ -21,6 +21,8 @@ jobs:
           - php-version: "8.4"
             dependencies: lowest
       fail-fast: false
+    env:
+      SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.dependencies == 'lowest' && 'disabled=1' || '' }}
 
     services:
       mysql:
