@@ -21,12 +21,12 @@ trait TypedSerializerTrait
         denormalize as private doDenormalize;
     }
 
-    public function normalize(mixed $data, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         return $this->doNormalize($data, $format, $context);
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         return $this->doDenormalize($data, $type, $format, $context);
     }
