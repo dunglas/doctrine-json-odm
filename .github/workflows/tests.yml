@@ -22,7 +22,7 @@ jobs:
             dependencies: lowest
       fail-fast: false
     env:
-      SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.dependencies == 'lowest' && 'disabled=1' || '' }}
+      SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.dependencies == 'lowest' && 'disabled=1' || 'max[direct]=0' }}
 
     services:
       mysql:
