@@ -56,7 +56,7 @@ trait SerializerTrait
         if (\is_object($data)) {
             $typeName = \get_class($data);
 
-            $data = parent::normalize($data, $format, $context);
+            $data = parent::normalize($data, $format, $context + [self::CONTEXT_SERIALIZER => $this]);
 
             if ($this->typeMapper) {
                 $typeName = $this->typeMapper->getTypeByClass($typeName);
@@ -108,7 +108,7 @@ trait SerializerTrait
                 }
             }
 
-            return parent::denormalize($data, $keyType, $format, $context);
+            return parent::denormalize($data, $keyType, $format, $context + [self::CONTEXT_SERIALIZER => $this]);
         }
 
         foreach ($data as &$datum) {

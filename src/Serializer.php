@@ -18,6 +18,7 @@ if (method_exists(ArrayDenormalizer::class, 'setSerializer')) {
     {
         use SerializerTrait;
 
+        private const CONTEXT_SERIALIZER = '#serializer';
         private const KEY_TYPE = '#type';
         private const KEY_SCALAR = '#scalar';
     }
@@ -27,6 +28,7 @@ if (method_exists(ArrayDenormalizer::class, 'setSerializer')) {
     {
         use TypedSerializerTrait;
 
+        private const CONTEXT_SERIALIZER = '#serializer';
         private const KEY_TYPE = '#type';
         private const KEY_SCALAR = '#scalar';
     }
