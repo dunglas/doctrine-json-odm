@@ -46,17 +46,18 @@ trait SerializerTrait
     public function normalize($data, $format = null, array $context = [])
     {
         if (\is_array($data)) {
-            foreach ($data as &$datum) {
-                $datum = $this->normalize($datum, $format, $context);
+            $normData = [];
+            foreach ($data as $idx => $datum) {
+                $normData[$idx] = $this->normalize($datum, $format, $context);
             }
 
-            return $data;
+            return $normData;
         }
 
         if (\is_object($data)) {
             $typeName = \get_class($data);
 
-            $data = parent::normalize($data, $format, $context + [self::CONTEXT_SERIALIZER => $this]);
+            $normData = parent::normalize($data, $format, $context + [self::CONTEXT_SERIALIZER => $this]);
 
             if ($this->typeMapper) {
                 $typeName = $this->typeMapper->getTypeByClass($typeName);
@@ -64,16 +65,14 @@ trait SerializerTrait
 
             $typeData = [self::KEY_TYPE => $typeName];
 
-            if (\is_scalar($data)) {
-                $data = [self::KEY_SCALAR => $data];
+            if (\is_array($normData) && !isset($normData[self::KEY_TYPE])) {
+                $normData = $this->normalize($normData, $format, $context);
             }
-            if (\is_array($data)) {
-                foreach ($data as &$datum) {
-                    $datum = $this->normalize($datum, $format, $context);
-                }
+            if (\is_scalar($normData)) {
+                $normData = [self::KEY_SCALAR => $normData];
             }
 
-            $data = \array_merge($typeData, $data);
+            return \array_merge($typeData, $normData);
         }
 
         return $data;
@@ -103,16 +102,16 @@ trait SerializerTrait
             $data = $data[self::KEY_SCALAR] ?? $data;
 
             if (\is_array($data)) {
-                foreach ($data as &$datum) {
-                    $datum = $this->denormalize($datum, $keyType, $format, $context);
+                foreach ($data as $idx => $datum) {
+                    $data[$idx] = $this->denormalize($datum, $keyType, $format, $context);
                 }
             }
 
             return parent::denormalize($data, $keyType, $format, $context + [self::CONTEXT_SERIALIZER => $this]);
         }
 
-        foreach ($data as &$datum) {
-            $datum = $this->denormalize($datum, '', $format, $context);
+        foreach ($data as $idx => $datum) {
+            $data[$idx] = $this->denormalize($datum, '', $format, $context);
         }
 
         return $data;
