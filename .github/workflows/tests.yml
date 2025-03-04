@@ -14,12 +14,15 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
         dependencies:
           - highest
         include:
-          - php-version: "8.3"
+          - php-version: "8.4"
             dependencies: lowest
       fail-fast: false
+    env:
+      SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.dependencies == 'lowest' && 'disabled=1' || 'max[direct]=0' }}
 
     services:
       mysql:
@@ -42,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -51,7 +54,7 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, pdo_pgsql
 
       - name: Install dependencies
-        uses: "ramsey/composer-install@v2"
+        uses: ramsey/composer-install@v3
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 
