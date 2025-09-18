@@ -25,7 +25,7 @@ final class TypeMapper implements TypeMapperInterface
     private $classToType;
 
     /**
-     * @param array<class-string, string> $typeToClass
+     * @param array<string, class-string> $typeToClass
      */
     public function __construct(array $typeToClass)
     {
