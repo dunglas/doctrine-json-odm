@@ -176,11 +176,27 @@ dunglas_doctrine_json_odm:
         bar: App\SomethingElse\Bar
 ```
 
+Or, the same config in PHP for better type-safety, e.g. `config/packages/doctrine_json_odm.php`:
+
+```php
+<?php
+
+use App\Something\Foo;
+use App\SomethingElse\Bar;
+
+return static function (\Symfony\Config\DunglasDoctrineJsonOdmConfig $config): void {
+    $config->typeMap('foo', Foo::class);
+    $config->typeMap('bar', Bar::class);
+};
+```
+
 With this, `Foo` objects will be serialized as:
 
 ```json
 { "#type": "foo", "someProperty": "someValue" }
 ```
+
+
 
 Another option is to use your own custom type mapper implementing `Dunglas\DoctrineJsonOdm\TypeMapperInterface`. For this, just override the service definition:
 
