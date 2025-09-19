@@ -16,6 +16,8 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\TraversableValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Vector;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
@@ -240,5 +242,40 @@ class SerializerTest extends AbstractKernelTestCase
         $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
+    }
+
+    /** Uses {@link VectorNormalizer} to normalize Vector, otherwise it will be treated as Traversable and fail */
+    public function testSerializeObjectWithConfiguredNormalizer(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $attribute = new Attribute();
+        $attribute->key = 'foo';
+        $attribute->value = 'bar';
+
+        $vector = new Vector([$attribute, 2, 3, 4, 5]);
+        $vector->next();
+
+        $data = $serializer->serialize($vector, 'json');
+        $restoredVector = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($vector, $restoredVector);
+    }
+
+    /** {@see \Dunglas\DoctrineJsonOdm\Normalizer\TraversableNormalizer} */
+    public function testTraversableNormalizer(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $attribute = new Attribute();
+        $attribute->key = 'foo';
+        $attribute->value = 'bar';
+
+        $vector = new TraversableValue([$attribute, 'x' => 2, 'y'=>[3], 'z'=>'4', 5, ['' => null]]);
+
+        $data = $serializer->serialize($vector, 'json');
+        $restoredVector = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($vector, $restoredVector);
     }
 }
