@@ -7,6 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\ORM\Proxy\Proxy;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
