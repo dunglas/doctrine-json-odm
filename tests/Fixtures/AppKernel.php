@@ -8,6 +8,7 @@
  */
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\DBAL\Types\JsonbType;
 use Doctrine\ORM\Proxy\Proxy;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\MakeServicesPublicPass;
@@ -51,6 +52,26 @@ class AppKernel extends Kernel
         ]);
 
         $orm = ['auto_mapping' => true];
+//        $ormMappings = [
+//            'TestBundle' => [
+//                'is_bundle' => false,
+//                'type' => 'attribute',
+//                'dir' => __DIR__.'/TestBundle/Entity',
+//                'prefix' => 'Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity',
+//                'alias' => 'TestBundle',
+//            ],
+//        ];
+//
+//        if (class_exists(JsonbType::class)) {
+//            $ormMappings['TestBundleJsonb'] = [
+//                'is_bundle' => false,
+//                'type' => 'attribute',
+//                'dir' => __DIR__.'/TestBundle/Entity/Jsonb',
+//                'prefix' => 'Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Jsonb',
+//                'alias' => 'TestBundleJsonb',
+//            ];
+//        }
+//        $orm = ['mappings' => $ormMappings];
 
         if (\PHP_VERSION_ID >= 80400 && !interface_exists(Proxy::class)) {
             $orm['enable_native_lazy_objects'] = true;

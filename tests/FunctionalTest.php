@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
+use Doctrine\DBAL\Types\JsonbType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
@@ -16,6 +17,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Jsonb\ProductJsonb;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Uid\Uuid;
@@ -245,5 +247,55 @@ class FunctionalTest extends AbstractKernelTestCase
 
         $this->assertInstanceOf(Uuid::class, $retrievedProduct->attributes[0]->value);
         $this->assertEquals($uuid, (string) $retrievedProduct->attributes[0]->value);
+    }
+
+    public function testStoreAndRetrieveJsonbDocument(): void
+    {
+        if (!class_exists(JsonbType::class)) {
+            $this->markTestSkipped('Doctrine DBAL 4.3.0+ is required for jsonb_document type.');
+        }
+
+        $attribute1 = new Attribute();
+        $attribute1->key = 'foo';
+        $attribute1->value = 'bar';
+
+        $attribute2 = new Attribute();
+        $attribute2->key = 'weights';
+        $attribute2->value = [34, 67];
+
+        $attributes = [$attribute1, $attribute2];
+
+        $product = new ProductJsonb();
+        $product->name = 'My JSONB product';
+        $product->attributes = $attributes;
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(ProductJsonb::class);
+        $manager->persist($product);
+        $manager->flush();
+
+        $manager->clear();
+
+        $retrievedProduct = $manager->find(ProductJsonb::class, $product->id);
+        $this->assertEquals($attributes, $retrievedProduct->attributes);
+    }
+
+    public function testNullIsStoredAsNullJsonb(): void
+    {
+        if (!class_exists(JsonbType::class)) {
+            $this->markTestSkipped('Doctrine DBAL 4.3.0+ is required for jsonb_document type.');
+        }
+
+        $product = new ProductJsonb();
+        $product->name = 'My JSONB product';
+        $product->attributes = null;
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(ProductJsonb::class);
+        $manager->persist($product);
+        $manager->flush();
+        $manager->clear();
+
+        $connection = $manager->getConnection();
+        $statement = $connection->executeQuery('SELECT * FROM ProductJsonb');
+        $this->assertNull($statement->fetchAssociative()['attributes']);
     }
 }
