@@ -71,7 +71,7 @@ class AppKernel extends Kernel
 //                'alias' => 'TestBundleJsonb',
 //            ];
 //        }
-//        $orm = ['mappings' => $ormMappings];
+//        $orm = ['controller_resolver' => ['auto_mapping' => false], 'mappings' => $ormMappings];
 
         if (\PHP_VERSION_ID >= 80400 && !interface_exists(Proxy::class)) {
             $orm['enable_native_lazy_objects'] = true;
