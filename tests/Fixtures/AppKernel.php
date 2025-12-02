@@ -9,7 +9,6 @@
 
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Doctrine\DBAL\Types\JsonbType;
 use Doctrine\ORM\Proxy\Proxy;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\MakeServicesPublicPass;
