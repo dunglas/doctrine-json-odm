@@ -9,7 +9,6 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
-use Doctrine\DBAL\Types\JsonbType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
@@ -251,7 +250,7 @@ class FunctionalTest extends AbstractKernelTestCase
 
     public function testStoreAndRetrieveJsonbDocument(): void
     {
-        if (!class_exists(JsonbType::class)) {
+        if (!class_exists(\Doctrine\DBAL\Types\JsonbType::class)) {
             $this->markTestSkipped('Doctrine DBAL 4.3.0+ is required for jsonb_document type.');
         }
 
@@ -281,7 +280,7 @@ class FunctionalTest extends AbstractKernelTestCase
 
     public function testNullIsStoredAsNullJsonb(): void
     {
-        if (!class_exists(JsonbType::class)) {
+        if (!class_exists(\Doctrine\DBAL\Types\JsonbType::class)) {
             $this->markTestSkipped('Doctrine DBAL 4.3.0+ is required for jsonb_document type.');
         }
 

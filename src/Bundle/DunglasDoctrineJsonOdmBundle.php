@@ -9,7 +9,6 @@
 
 namespace Dunglas\DoctrineJsonOdm\Bundle;
 
-use Doctrine\DBAL\Types\JsonbType;
 use Doctrine\DBAL\Types\Type;
 use Dunglas\DoctrineJsonOdm\Type\JsonbDocumentType;
 use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
@@ -28,7 +27,7 @@ final class DunglasDoctrineJsonOdmBundle extends Bundle
             Type::addType('json_document', JsonDocumentType::class);
         }
 
-        if (class_exists(JsonbType::class) && !Type::hasType('jsonb_document')) {
+        if (class_exists(\Doctrine\DBAL\Types\JsonbType::class) && !Type::hasType('jsonb_document')) {
             Type::addType('jsonb_document', JsonbDocumentType::class);
         }
     }
