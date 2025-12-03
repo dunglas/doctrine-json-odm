@@ -9,7 +9,6 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
-use Doctrine\DBAL\Types\JsonbType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
