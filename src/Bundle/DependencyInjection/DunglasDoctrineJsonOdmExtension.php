@@ -13,7 +13,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 
@@ -45,8 +45,8 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.php');
 
         if (PHP_VERSION_ID < 80100 || !class_exists(BackedEnumNormalizer::class)) {
             $container->removeDefinition('dunglas_doctrine_json_odm.normalizer.backed_enum');
