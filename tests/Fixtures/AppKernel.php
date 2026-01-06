@@ -7,9 +7,8 @@
  * with this source code in the file LICENSE.
  */
 
-use Composer\InstalledVersions;
-use Composer\Semver\VersionParser;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\ORM\Proxy\Proxy;
 use Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\DependencyInjection\MakeServicesPublicPass;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\TestBundle;
@@ -56,7 +55,7 @@ class AppKernel extends Kernel
             'auto_mapping' => true,
         ];
 
-        if (\PHP_VERSION_ID >= 80400 && InstalledVersions::satisfies(new VersionParser(), 'doctrine/orm', '^3.0')) {
+        if (\PHP_VERSION_ID >= 80400 && !interface_exists(Proxy::class)) {
             $orm['enable_native_lazy_objects'] = true;
         }
 
