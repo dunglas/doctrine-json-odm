@@ -10,7 +10,7 @@ The easiest way to get them up and running is using Docker:
 
 Then run the test suite:
 
-    DATABASE_URL='mysql://root:root@127.0.0.1:3306/odm?serverVersion=8.0' ./vendor/bin/simple-phpunit
+    DATABASE_URL='mysql://root:root@127.0.0.1:3306/odm?serverVersion=9' ./vendor/bin/simple-phpunit
 
 ## Postgres
 
