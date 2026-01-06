@@ -8,26 +8,26 @@
   "authors": [
     {
       "name": "Kévin Dunglas",
-      "email": "kevin@dunglas.fr",
-      "homepage": "https://dunglas.fr"
+      "email": "kevin@dunglas.dev",
+      "homepage": "https://dunglas.dev"
     }
   ],
   "require": {
     "php": ">=8.1",
-    "doctrine/orm": "^2.6.3 || ^3.0.0",
-    "symfony/property-access": "^5.4 || ^6.0 || ^7.0 || ^8.0",
-    "symfony/property-info": "^5.4 || ^6.0 || ^7.0 || ^8.0",
-    "symfony/serializer": "^5.4 || ^6.0 || ^7.0 || ^8.0"
+    "doctrine/orm": "^2.6.3 || ^3.0",
+    "symfony/property-access": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+    "symfony/property-info": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+    "symfony/serializer": "^5.4 || ^6.4 || ^7.4 || ^8.0"
   },
   "require-dev": {
-    "doctrine/annotations": "^1.0 || ^2.0.0",
-    "doctrine/doctrine-bundle": "^1.12.13 || ^2.2",
+    "doctrine/annotations": "^1.0 || ^2.0",
+    "doctrine/doctrine-bundle": "^1.12.13 || ^2.2 || ^3.0",
     "doctrine/dbal": "^2.7 || ^3.3 || ^4.0.0",
-    "symfony/finder": "^5.4 || ^6.0 || ^7.0 || ^8.0",
-    "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0 || ^8.0",
-    "symfony/phpunit-bridge": "^6.0 || ^7.0 || ^8.0",
-    "symfony/uid": "^5.4 || ^6.0 || ^7.0 || ^8.0",
-    "symfony/validator": "^5.4 || ^6.0 || ^7.0 || ^8.0"
+    "symfony/finder": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+    "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+    "symfony/phpunit-bridge": "^8.0",
+    "symfony/uid": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+    "symfony/validator": "^5.4 || ^6.4 || ^7.4 || ^8.0"
   },
   "suggest": {
     "symfony/framework-bundle": "To use the provided bundle.",
