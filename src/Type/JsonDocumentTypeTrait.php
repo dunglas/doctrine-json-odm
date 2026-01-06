@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 trait JsonDocumentTypeTrait
 {
-    private SerializerInterface $serializer;
+    private ?SerializerInterface $serializer = null;
 
     private string $format = 'json';
 
