@@ -3,7 +3,7 @@
   "type": "library",
   "description": "An object document mapper for Doctrine ORM using JSON types of modern RDBMS.",
   "keywords": ["ORM", "ODM", "JSON", "database", "RDBMS", "PostgreSQL", "MySQL"],
-  "homepage": "https://dunglas.fr",
+  "homepage": "https://dunglas.dev",
   "license": "MIT",
   "authors": [
     {

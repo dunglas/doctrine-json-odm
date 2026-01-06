@@ -15,10 +15,11 @@ jobs:
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         dependencies:
           - highest
         include:
-          - php-version: "8.4"
+          - php-version: "8.5"
             dependencies: lowest
       fail-fast: false
     env:
@@ -35,7 +36,7 @@ jobs:
           MYSQL_DATABASE: odm
 
       postgres:
-        image: postgres:14
+        image: postgres:16
         ports:
           - 5432:5432
         options: --health-cmd "/usr/bin/pg_isready" --health-interval 10s --health-timeout 5s --health-retries 10
@@ -45,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -63,10 +64,10 @@ jobs:
 
       - name: Run tests (MySQL)
         env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/odm?serverVersion=8.0
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/odm?serverVersion=8
         run: php vendor/bin/simple-phpunit
 
       - name: Run tests (PostgreSQL)
         env:
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/odm?serverVersion=14&charset=utf8
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/odm?serverVersion=16&charset=utf8
         run: php vendor/bin/simple-phpunit
