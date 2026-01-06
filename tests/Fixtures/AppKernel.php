@@ -50,13 +50,12 @@ class AppKernel extends Kernel
             'http_method_override' => false,
         ]);
 
-        $orm = [
-            'auto_generate_proxy_classes' => true,
-            'auto_mapping' => true,
-        ];
+        $orm = ['auto_mapping' => true];
 
         if (\PHP_VERSION_ID >= 80400 && !interface_exists(Proxy::class)) {
             $orm['enable_native_lazy_objects'] = true;
+        } else {
+            $orm['auto_generate_proxy_classes'] = true;
         }
 
         $container->loadFromExtension('doctrine', [

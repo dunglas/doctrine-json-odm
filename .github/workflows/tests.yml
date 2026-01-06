@@ -27,7 +27,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8
+        image: mysql:9
         ports:
           - 3306:3306
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
@@ -64,7 +64,7 @@ jobs:
 
       - name: Run tests (MySQL)
         env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/odm?serverVersion=8
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/odm?serverVersion=9
         run: php vendor/bin/simple-phpunit
 
       - name: Run tests (PostgreSQL)
