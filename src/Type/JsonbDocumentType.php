@@ -9,18 +9,20 @@
 
 namespace Dunglas\DoctrineJsonOdm\Type;
 
-use Doctrine\DBAL\Types\JsonType;
+use Doctrine\DBAL\Types\JsonbType;
 
 /**
- * The JSON document type.
+ * The JSONB document type.
+ *
+ * Requires Doctrine DBAL 4.3.0+.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-final class JsonDocumentType extends JsonType
+final class JsonbDocumentType extends JsonbType
 {
     use JsonDocumentTypeTrait;
 
-    public const NAME = 'json_document';
+    public const NAME = 'jsonb_document';
 
     public function getName(): string
     {

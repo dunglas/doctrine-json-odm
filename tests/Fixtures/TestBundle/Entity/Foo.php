@@ -9,64 +9,127 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity;
 
+use Doctrine\DBAL\Types\JsonbType;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- *
- * @author Kévin Dunglas <dunglas@gmail.com>
- */
-#[ORM\Entity]
-class Foo
-{
+if (!class_exists(JsonbType::class)) {
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Entity
      *
-     * @ORM\Id
+     * @author Kévin Dunglas <dunglas@gmail.com>
+     */
+    #[ORM\Entity]
+    class Foo
+    {
+        /**
+         * @ORM\Column(type="integer")
+         *
+         * @ORM\Id
+         *
+         * @ORM\GeneratedValue(strategy="AUTO")
+         */
+        #[
+            ORM\Column(type: 'integer'),
+            ORM\Id,
+            ORM\GeneratedValue(strategy: 'AUTO'),
+        ]
+        private $id;
+
+        /**
+         * @ORM\Column(type="string")
+         */
+        #[ORM\Column(type: 'string')]
+        private $name;
+
+        /**
+         * @ORM\Column(type="json_document", options={"jsonb": true})
+         */
+        #[ORM\Column(type: 'json_document', options: ['jsonb' => true])]
+        private $misc;
+
+        public function getId()
+        {
+            return $this->id;
+        }
+
+        public function getName()
+        {
+            return $this->name;
+        }
+
+        public function setName($name): void
+        {
+            $this->name = $name;
+        }
+
+        public function getMisc()
+        {
+            return $this->misc;
+        }
+
+        public function setMisc(array $misc): void
+        {
+            $this->misc = $misc;
+        }
+    }
+} else {
+    /**
+     * @ORM\Entity
      *
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @author Kévin Dunglas <dunglas@gmail.com>
      */
-    #[
-        ORM\Column(type: 'integer'),
-        ORM\Id,
-        ORM\GeneratedValue(strategy: 'AUTO'),
-    ]
-    private $id;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Column(type: 'string')]
-    private $name;
-
-    /**
-     * @ORM\Column(type="json_document", options={"jsonb": true})
-     */
-    #[ORM\Column(type: 'json_document', options: ['jsonb' => true])]
-    private $misc;
-
-    public function getId()
+    #[ORM\Entity]
+    class Foo
     {
-        return $this->id;
-    }
+        /**
+         * @ORM\Column(type="integer")
+         *
+         * @ORM\Id
+         *
+         * @ORM\GeneratedValue(strategy="AUTO")
+         */
+        #[
+            ORM\Column(type: 'integer'),
+            ORM\Id,
+            ORM\GeneratedValue(strategy: 'AUTO'),
+        ]
+        private $id;
 
-    public function getName()
-    {
-        return $this->name;
-    }
+        /**
+         * @ORM\Column(type="string")
+         */
+        #[ORM\Column(type: 'string')]
+        private $name;
 
-    public function setName($name): void
-    {
-        $this->name = $name;
-    }
+        /**
+         * @ORM\Column(type="jsonb_document")
+         */
+        #[ORM\Column(type: 'jsonb_document')]
+        private $misc;
 
-    public function getMisc()
-    {
-        return $this->misc;
-    }
+        public function getId()
+        {
+            return $this->id;
+        }
 
-    public function setMisc(array $misc): void
-    {
-        $this->misc = $misc;
+        public function getName()
+        {
+            return $this->name;
+        }
+
+        public function setName($name): void
+        {
+            $this->name = $name;
+        }
+
+        public function getMisc()
+        {
+            return $this->misc;
+        }
+
+        public function setMisc(array $misc): void
+        {
+            $this->misc = $misc;
+        }
     }
 }

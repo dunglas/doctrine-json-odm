@@ -33,10 +33,12 @@ If you use Doctrine directly, use a bootstrap code similar to the following:
 
 require_once __DIR__.'/../vendor/autoload.php'; // Adjust to your path
 
+use Doctrine\DBAL\Types\JsonbType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Dunglas\DoctrineJsonOdm\Serializer;
+use Dunglas\DoctrineJsonOdm\Type\JsonbDocumentType;
 use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -45,11 +47,17 @@ use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+$serializer = new Serializer([new BackedEnumNormalizer(), new UidNormalizer(), new DateTimeNormalizer(), new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()]);
+
 if (!Type::hasType('json_document')) {
     Type::addType('json_document', JsonDocumentType::class);
-    Type::getType('json_document')->setSerializer(
-        new Serializer([new BackedEnumNormalizer(), new UidNormalizer(), new DateTimeNormalizer(), new ArrayDenormalizer(), new ObjectNormalizer()], [new JsonEncoder()])
-    );
+    Type::getType('json_document')->setSerializer($serializer);
+}
+
+// jsonb_document requires Doctrine DBAL 4.3.0+
+if (class_exists(JsonbType::class) && !Type::hasType('jsonb_document')) {
+    Type::addType('jsonb_document', JsonbDocumentType::class);
+    Type::getType('jsonb_document')->setSerializer($serializer);
 }
 
 // Sample bootstrapping code here, adapt to fit your needs
@@ -70,6 +78,7 @@ return EntityManager::create($conn, $config);
 ## Usage
 
 Doctrine JSON ODM provides a `json_document` column type for properties of Doctrine entities.
+Starting with Doctrine DBAL 4.3.0+, a `jsonb_document` type is also available, leveraging native JSONB support.
 
 The content of properties mapped with this type is serialized in JSON using the [Symfony Serializer](http://symfony.com/doc/current/components/serializer.html)
 then, it is stored in a dynamic JSON column in the database.
@@ -236,7 +245,18 @@ Doctrine ORM 2.6+ and DBAL 2.6+ are supported.
 
 **How to use [the JSONB type of PostgreSQL](http://www.postgresql.org/docs/current/static/datatype-json.html)?**
 
-Then, you need to set an option in the column mapping:
+With Doctrine DBAL 4.3.0+, use the dedicated `jsonb_document` type:
+
+```php
+// ...
+
+    #[Column(type: 'jsonb_document')]
+    public $foo;
+
+// ...
+```
+
+For older DBAL versions, set an option in the column mapping:
 
 ```php
 // ...
