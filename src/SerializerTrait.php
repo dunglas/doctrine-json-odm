@@ -54,9 +54,8 @@ trait SerializerTrait
                 $typeName = $this->typeMapper->getTypeByClass($typeName);
             }
 
-            $typeData = [self::KEY_TYPE => $typeName];
-            $valueData = is_scalar($normalizedData) ? [self::KEY_SCALAR => $normalizedData] : $normalizedData;
-            $normalizedData = array_merge($typeData, $valueData);
+            $normalizedData = is_scalar($normalizedData) ? [self::KEY_SCALAR => $normalizedData] : $normalizedData;
+            $normalizedData[self::KEY_TYPE] = $typeName;
         }
 
         return $normalizedData;
@@ -69,7 +68,7 @@ trait SerializerTrait
      */
     public function denormalize($data, $type, $format = null, array $context = [])
     {
-        if (\is_array($data) && (isset($data[self::KEY_TYPE]))) {
+        if ((\is_array($data) || $data instanceof \ArrayObject) && (isset($data[self::KEY_TYPE]))) {
             $keyType = $data[self::KEY_TYPE];
 
             if ($this->typeMapper) {
@@ -84,7 +83,7 @@ trait SerializerTrait
             return parent::denormalize($data, $keyType, $format, $context);
         }
 
-        if (is_iterable($data)) {
+        if (is_iterable($data) && !$data instanceof \ArrayObject) {
             $type = ('' === $type) ? 'stdClass' : $type;
 
             return parent::denormalize($data, $type.'[]', $format, $context);
