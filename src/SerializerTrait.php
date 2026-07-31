@@ -78,10 +78,7 @@ trait SerializerTrait
 
             unset($data[self::KEY_TYPE]);
 
-            $data = $data[self::KEY_SCALAR] ?? $data;
-            $data = $this->denormalize($data, $keyType, $format, $context);
-
-            return parent::denormalize($data, $keyType, $format, $context);
+            return parent::denormalize($data[self::KEY_SCALAR] ?? $data, $keyType, $format, $context);
         }
 
         if (is_iterable($data)) {
