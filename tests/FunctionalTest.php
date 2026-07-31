@@ -29,13 +29,8 @@ class FunctionalTest extends AbstractKernelTestCase
     {
         parent::setUp();
 
-        $this->runCommand('doctrine:schema:drop --force');
-        $this->runCommand('doctrine:schema:create');
-    }
-
-    private function runCommand($command): void
-    {
-        $this->application->run(new StringInput($command.' --no-interaction --quiet'));
+        $this->application->run(new StringInput('doctrine:schema:drop --force --no-interaction --quiet'));
+        $this->application->run(new StringInput('doctrine:schema:create --no-interaction --quiet'));
     }
 
     public function testStoreAndRetrieveDocument(): void
