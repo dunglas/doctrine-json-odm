@@ -87,7 +87,11 @@ trait SerializerTrait
         if (is_iterable($data)) {
             $type = ('' === $type) ? 'stdClass' : $type;
 
-            return parent::denormalize($data, $type.'[]', $format, $context);
+            if (!str_ends_with($type, '[]')) {
+                $type .= '[]';
+            }
+
+            return parent::denormalize($data, $type, $format, $context);
         }
 
         return $data;
