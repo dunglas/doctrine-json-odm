@@ -16,6 +16,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Baz;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
+use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\TypedAttributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
@@ -98,6 +99,26 @@ class SerializerTest extends AbstractKernelTestCase
         $attribute2->key = 'attribute2';
 
         $attributes = new Attributes();
+        $attributes->setAttributes([$attribute1, $attribute2]);
+
+        $misc = [$attributes];
+
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+        $data = $serializer->serialize($misc, 'json');
+        $restoredMisc = $serializer->deserialize($data, '', 'json');
+
+        $this->assertEquals($misc, $restoredMisc);
+    }
+
+    public function testTypedCollectionInNestedObject(): void
+    {
+        $attribute1 = new Attribute();
+        $attribute1->key = 'attribute1';
+
+        $attribute2 = new Attribute();
+        $attribute2->key = 'attribute2';
+
+        $attributes = new TypedAttributes();
         $attributes->setAttributes([$attribute1, $attribute2]);
 
         $misc = [$attributes];
