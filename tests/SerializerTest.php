@@ -19,6 +19,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\ScalarValue;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\WithMappedType;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -240,5 +241,29 @@ class SerializerTest extends AbstractKernelTestCase
         $restoredValue = $serializer->deserialize($data, '', 'json');
 
         $this->assertEquals($value, $restoredValue);
+    }
+
+    public function testArrayObjectNormalization(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $data = $serializer->normalize(new Bar(), 'json', [
+            AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+            AbstractObjectNormalizer::SKIP_UNINITIALIZED_VALUES => true,
+            AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true,
+        ]);
+
+        $this->assertInstanceOf(\ArrayObject::class, $data);
+        $this->assertArrayHasKey('#type', $data);
+        $this->assertSame(Bar::class, $data['#type']);
+    }
+
+    public function testArrayObjectDenormalization(): void
+    {
+        $serializer = self::$kernel->getContainer()->get('dunglas_doctrine_json_odm.serializer');
+
+        $data = $serializer->denormalize(new \ArrayObject(['#type' => Bar::class]), '', 'json');
+
+        $this->assertInstanceOf(Bar::class, $data);
     }
 }

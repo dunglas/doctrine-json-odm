@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\Tests;
 
+use Doctrine\DBAL\Types\Type;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Document\Bar;
@@ -18,6 +19,7 @@ use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Foo;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Product;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Enum\InputMode;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -160,6 +162,31 @@ class FunctionalTest extends AbstractKernelTestCase
         $connection = $manager->getConnection();
         $statement = $connection->executeQuery('SELECT * FROM Product');
         $this->assertNull($statement->fetchAssociative()['attributes']);
+    }
+
+    public function testEmptyArrayAsArrayObject(): void
+    {
+        Type::getType('json_document')->setSerializationContext([
+            AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+            AbstractObjectNormalizer::SKIP_UNINITIALIZED_VALUES => true,
+            AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true,
+        ]);
+
+        $attributes = [
+            new Attribute(),
+        ];
+
+        $product = new Product();
+        $product->name = 'My product';
+        $product->attributes = $attributes;
+
+        $manager = self::$kernel->getContainer()->get('doctrine')->getManagerForClass(Product::class);
+        $manager->persist($product);
+        $manager->flush();
+        $manager->clear();
+
+        $retrievedProduct = $manager->find(Product::class, $product->id);
+        $this->assertEquals($attributes, $retrievedProduct->attributes);
     }
 
     public function testStoreAndRetrieveDocumentWithInstantiatedOtherSerializer(): void
