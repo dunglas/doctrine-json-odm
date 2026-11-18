@@ -19,6 +19,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 trait JsonDocumentTypeTrait
 {
+    /**
+     * Shared by every instance of the type, so the serializer can be provided once even when the
+     * instance is created by Doctrine rather than by the caller.
+     */
+    private static ?SerializerInterface $sharedSerializer = null;
+
     private ?SerializerInterface $serializer = null;
 
     private string $format = 'json';
@@ -36,17 +42,25 @@ trait JsonDocumentTypeTrait
     }
 
     /**
+     * Sets the serializer used by every instance of this type that was not given one of its own.
+     */
+    public static function setSharedSerializer(SerializerInterface $serializer): void
+    {
+        self::$sharedSerializer = $serializer;
+    }
+
+    /**
      * Gets the serializer or throw an exception if it isn't available.
      *
      * @throws \RuntimeException
      */
     private function getSerializer(): SerializerInterface
     {
-        if (null === $this->serializer) {
-            throw new \RuntimeException(sprintf('An instance of "%s" must be available. Call the "setSerializer" method.', SerializerInterface::class));
+        if (null === $serializer = $this->serializer ?? self::$sharedSerializer) {
+            throw new \RuntimeException(sprintf('An instance of "%s" must be available. Call the "setSerializer" or "setSharedSerializer" method.', SerializerInterface::class));
         }
 
-        return $this->serializer;
+        return $serializer;
     }
 
     /**

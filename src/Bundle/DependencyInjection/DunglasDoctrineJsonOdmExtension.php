@@ -9,6 +9,9 @@
 
 namespace Dunglas\DoctrineJsonOdm\Bundle\DependencyInjection;
 
+use Doctrine\DBAL\Types\JsonbType;
+use Dunglas\DoctrineJsonOdm\Type\JsonbDocumentType;
+use Dunglas\DoctrineJsonOdm\Type\JsonDocumentType;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -27,6 +30,8 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
      */
     public function prepend(ContainerBuilder $container): void
     {
+        $this->prependDoctrineTypes($container);
+
         if (empty($frameworkConfiguration = $container->getExtensionConfig('framework'))) {
             return;
         }
@@ -38,6 +43,26 @@ final class DunglasDoctrineJsonOdmExtension extends Extension implements Prepend
         if (!isset($frameworkConfiguration['property_info']['enabled'])) {
             $container->prependExtensionConfig('framework', ['property_info' => ['enabled' => true]]);
         }
+    }
+
+    /**
+     * Registers the types through DoctrineBundle instead of the process-wide `Type` registry, which
+     * DBAL 4.6 deprecates and DBAL 5 removes.
+     */
+    private function prependDoctrineTypes(ContainerBuilder $container): void
+    {
+        if (!$container->hasExtension('doctrine')) {
+            return;
+        }
+
+        $types = [JsonDocumentType::NAME => JsonDocumentType::class];
+
+        if (class_exists(JsonbType::class)) {
+            $types[JsonbDocumentType::NAME] = JsonbDocumentType::class;
+        }
+
+        // Prepended, so a type a user declares under the same name still wins.
+        $container->prependExtensionConfig('doctrine', ['dbal' => ['types' => $types]]);
     }
 
     /**
